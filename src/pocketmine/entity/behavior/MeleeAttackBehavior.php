@@ -30,7 +30,6 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\math\Vector3;
 
 class MeleeAttackBehavior extends Behavior{
-
 	/** @var float */
 	protected $speedMultiplier = 0;
 

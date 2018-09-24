@@ -32,7 +32,6 @@ use pocketmine\entity\Mob;
 use pocketmine\math\Vector3;
 
 class WanderBehavior extends Behavior{
-
 	/** @var float */
 	protected $speedMultiplier = 1.0, $followRange = 16.0;
 	/** @var int */
@@ -55,7 +54,6 @@ class WanderBehavior extends Behavior{
 			if($pos === null) return false;
 
 			$this->followRange = $this->mob->distanceSquared($pos) + 2;
-
 			$this->targetPos = $pos;
 
 			return true;
@@ -89,6 +87,7 @@ class WanderBehavior extends Behavior{
 			$block = $entity->level->getBlock($this->mob->asVector3()->add($blockCoords));
 			$blockDown = $block->getSide(0);
 			$weight = $this->calculateBlockWeight($entity, $block, $blockDown);
+			
 			if($weight > $currentWeight){
 				$currentWeight = $weight;
 				$currentBlock = $block;

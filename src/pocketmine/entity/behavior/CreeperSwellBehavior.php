@@ -27,7 +27,6 @@ namespace pocketmine\entity\behavior;
 use pocketmine\entity\hostile\Creeper;
 
 class CreeperSwellBehavior extends Behavior{
-
 	/** @var Creeper */
 	protected $mob;
 

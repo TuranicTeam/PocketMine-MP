@@ -47,7 +47,6 @@ class Boat extends Vehicle{
 		$this->setHealth(4);
 		$this->setGenericFlag(self::DATA_FLAG_STACKABLE);
 		$this->setImmobile(false);
-
 		$this->setBoatType($nbt->getInt(self::TAG_VARIANT, 0));
 
 		parent::initEntity($nbt);

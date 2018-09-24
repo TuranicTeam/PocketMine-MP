@@ -43,7 +43,6 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 
 class Sheep extends Tamable{
-
     public const NETWORK_ID = self::SHEEP;
 
     public $width = 0.9;
@@ -126,7 +125,6 @@ class Sheep extends Tamable{
 
 	public function saveNBT() : CompoundTag{
 		$nbt = parent::saveNBT();
-
 		$nbt->setByte("Sheared", intval($this->isSheared()));
 		$nbt->setByte("Color", intval($this->propertyManager->getByte(self::DATA_COLOR)));
 

@@ -35,7 +35,6 @@ use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\LevelEventPacket;
 
 class EnderPearl extends Throwable{
-
 	public const NETWORK_ID = EntityIds::ENDER_PEARL;
 
 	public $width = 0.25;

@@ -27,7 +27,6 @@ namespace pocketmine\entity\pathfinder;
 use pocketmine\math\Vector2;
 
 class PathPoint extends Vector2{
-
 	/** @var int */
 	public $fScore = 0, $gScore = 0, $height = 0;
 

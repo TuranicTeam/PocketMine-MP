@@ -48,13 +48,10 @@ abstract class Animal extends Mob implements Ageable{
 				if($player->isSurvival()){
 					$item->pop();
 				}
-				return true;
-			}elseif($this->isBaby()){
-				if($player->isSurvival()){
-					$item->pop();
-				}
-				return true;
+			}elseif($this->isBaby() && $player->isSurvival()){
+			    $item->pop();
 			}
+            return true;
 		}
 		return false;
 	}

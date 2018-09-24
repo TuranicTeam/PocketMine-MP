@@ -41,7 +41,6 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 
 class Cow extends Tamable{
-
 	public const NETWORK_ID = self::COW;
 
 	public $width = 0.9;

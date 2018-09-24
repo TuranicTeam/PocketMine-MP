@@ -24,7 +24,6 @@ declare(strict_types=1);
 
 namespace pocketmine\entity;
 
-
 use pocketmine\entity\behavior\BehaviorPool;
 use pocketmine\entity\pathfinder\EntityNavigator;
 use pocketmine\level\Level;
@@ -32,8 +31,6 @@ use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
 use pocketmine\math\VoxelRayTrace;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\network\mcpe\protocol\EntityEventPacket;
-use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
 
 abstract class Mob extends Living{
@@ -117,7 +114,6 @@ abstract class Mob extends Living{
 
 	public function saveNBT() : CompoundTag{
 		$nbt = parent::saveNBT();
-
 		$nbt->setByte("aiEnabled", intval($this->aiEnabled));
 
 		return $nbt;

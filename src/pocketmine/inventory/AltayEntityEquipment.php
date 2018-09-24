@@ -31,7 +31,6 @@ use pocketmine\network\mcpe\protocol\MobEquipmentPacket;
 use pocketmine\Player;
 
 class AltayEntityEquipment extends BaseInventory{
-
 	/** @var Living */
 	protected $holder;
 
@@ -61,10 +60,6 @@ class AltayEntityEquipment extends BaseInventory{
 		$pk->entityRuntimeId = $this->holder->getId();
 		$pk->inventorySlot = $pk->hotbarSlot = $index;
 		$pk->item = $this->getItem($index);
-
-		if($target instanceof Player){
-			$target = [$target];
-		}
 
 		foreach($target as $player){
 			$player->sendDataPacket($pk);

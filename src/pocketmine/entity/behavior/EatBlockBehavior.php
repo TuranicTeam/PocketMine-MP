@@ -35,7 +35,6 @@ use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\EntityEventPacket;
 
 class EatBlockBehavior extends Behavior{
-
 	/** @var int */
 	protected $duration;
 
@@ -67,16 +66,16 @@ class EatBlockBehavior extends Behavior{
 	}
 
 	public function onEnd() : void{
-		$direction = $this->mob->getDirectionVector()->normalize();
-
+		$direction   = $this->mob->getDirectionVector()->normalize();
 		$coordinates = $this->mob->add($direction->x, 0, $direction->z);
+		$broken      = $this->mob->level->getBlock($coordinates);
 
-		$broken = $this->mob->level->getBlock($coordinates);
 		if($broken instanceof TallGrass){
 			$this->mob->level->setBlock($coordinates, BlockFactory::get(Block::AIR));
 		}else{
 			$this->mob->level->setBlock($coordinates->getSide(Vector3::SIDE_DOWN), BlockFactory::get(Block::DIRT));
 		}
+
 		$this->mob->level->addParticle(new DestroyBlockParticle($this->mob, $broken));
 	}
 }

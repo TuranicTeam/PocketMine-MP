@@ -37,11 +37,9 @@ class ArmorInventoryEventProcessor implements InventoryEventProcessor{
 		$this->entity = $entity;
 	}
 
-	public function onSlotChange(Inventory $inventory, int $slot, Item $oldItem, Item $newItem) : ?Item{
+	public function onSlotChange(Inventory $inventory, int $slot, Item $oldItem, Item $newItem): ?Item{
 		Server::getInstance()->getPluginManager()->callEvent($ev = new EntityArmorChangeEvent($this->entity, $oldItem, $newItem, $slot));
-		if($ev->isCancelled()){
-			return null;
-		}
+		if($ev->isCancelled()) return null;
 
 		return $ev->getNewItem();
 	}

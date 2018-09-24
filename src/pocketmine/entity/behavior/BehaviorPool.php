@@ -27,7 +27,6 @@ namespace pocketmine\entity\behavior;
 use pocketmine\Server;
 
 class BehaviorPool{
-
 	/** @var Behavior[][] */
 	protected $behaviors = [];
 	/** @var Behavior[] */

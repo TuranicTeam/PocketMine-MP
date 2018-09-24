@@ -32,7 +32,6 @@ use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
 
 class Stray extends Skeleton{
-
 	public const NETWORK_ID = self::STRAY;
 
 	public function getName() : string{

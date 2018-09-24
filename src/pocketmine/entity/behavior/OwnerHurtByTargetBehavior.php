@@ -28,13 +28,12 @@ use pocketmine\entity\Living;
 use pocketmine\entity\Mob;
 
 class OwnerHurtByTargetBehavior extends Behavior{
-
 	protected $mutexBits = 1;
 
 	public function canStart() : bool{
+        /** @var Living $owner */
 		$owner = $this->mob->getOwningEntity();
 
-		/** @var Living $owner */
 		if($owner !== null){
 			$attacker = $owner->getLastAttacker();
 			if($attacker instanceof Mob){

@@ -134,11 +134,10 @@ class ExperienceOrb extends Entity{
 
 	public function saveNBT() : CompoundTag{
 		$nbt = parent::saveNBT();
-
 		$nbt->setShort("Age", $this->age);
-
 		$nbt->setShort(self::TAG_VALUE_PC, $this->getXpValue());
 		$nbt->setInt(self::TAG_VALUE_PE, $this->getXpValue());
+
 		return $nbt;
 	}
 

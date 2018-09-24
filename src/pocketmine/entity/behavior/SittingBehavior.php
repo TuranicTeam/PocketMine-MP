@@ -27,7 +27,6 @@ namespace pocketmine\entity\behavior;
 use pocketmine\entity\Tamable;
 
 class SittingBehavior extends Behavior{
-
 	/** @var Tamable */
 	protected $mob;
 

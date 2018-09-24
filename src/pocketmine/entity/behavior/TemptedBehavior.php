@@ -28,7 +28,6 @@ use pocketmine\entity\Mob;
 use pocketmine\Player;
 
 class TemptedBehavior extends Behavior{
-
 	/** @var float */
 	protected $speedMultiplier;
 	/** @var int[] */
@@ -43,16 +42,16 @@ class TemptedBehavior extends Behavior{
 	public function __construct(Mob $mob, array $temptItemIds, float $speedMultiplier, bool $scaredByPlayerMovement = false){
 		parent::__construct($mob);
 
-		$this->temptItems = $temptItemIds;
-		$this->speedMultiplier = $speedMultiplier;
+		$this->temptItems             = $temptItemIds;
+		$this->speedMultiplier        = $speedMultiplier;
 		$this->scaredByPlayerMovement = $scaredByPlayerMovement;
-
-		$this->mutexBits = 3;
+		$this->mutexBits              = 3;
 	}
 
 	public function canStart() : bool{
 		if($this->delayTemptCounter > 0){
 			$this->delayTemptCounter--;
+
 			return false;
 		}
 
@@ -75,6 +74,7 @@ class TemptedBehavior extends Behavior{
 				return false;
 			}
 		}
+
 		return $this->canStart();
 	}
 

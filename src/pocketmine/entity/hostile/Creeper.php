@@ -48,7 +48,6 @@ use pocketmine\Player;
 use pocketmine\tile\Skull;
 
 class Creeper extends Monster implements Ageable{
-
 	public const NETWORK_ID = self::CREEPER;
 
 	public $width = 0.6;
@@ -64,7 +63,6 @@ class Creeper extends Monster implements Ageable{
 		$this->setMovementSpeed(0.25);
 		$this->setFollowRange(35);
 		$this->setAttackDamage(1.0);
-
 		$this->setIgnited(boolval($nbt->getByte("ignited", 0)));
 		$this->setPowered(boolval($nbt->getByte("powered", 0)));
 
@@ -76,7 +74,6 @@ class Creeper extends Monster implements Ageable{
 
 	public function saveNBT() : CompoundTag{
 		$nbt = parent::saveNBT();
-
 		$nbt->setByte("ignited", intval($this->isIgnited()));
 		$nbt->setByte("powered", intval($this->isPowered()));
 		$nbt->setShort("Fuse", $this->fuseTime);
@@ -108,15 +105,19 @@ class Creeper extends Monster implements Ageable{
 
 	public function getDrops() : array{
 		$drops = [];
+
 		if($this->timeSinceIgnited !== $this->fuseTime){
 			$drops[] = ItemFactory::get(Item::GUNPOWDER, 0, rand(0, 2));
 		}
+
 		$attacker = $this->getLastAttacker();
+
 		if($attacker instanceof Skeleton){
 			$drops[] = ItemFactory::get(rand(Item::RECORD_13, Item::RECORD_WAIT));
 		}elseif($attacker instanceof Creeper and $attacker->isPowered()){
 			$drops[] = ItemFactory::get(Block::SKULL_BLOCK, Skull::TYPE_CREEPER);
 		}
+
 		return $drops;
 	}
 

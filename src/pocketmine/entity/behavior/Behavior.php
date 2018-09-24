@@ -28,7 +28,6 @@ use pocketmine\entity\Mob;
 use pocketmine\utils\Random;
 
 abstract class Behavior{
-
 	/** @var Mob */
 	protected $mob;
 	/** @var Random */
@@ -44,6 +43,7 @@ abstract class Behavior{
 	public abstract function canStart() : bool;
 
 	public function onStart() : void{
+
 	}
 
 	public function canContinue() : bool{
@@ -51,9 +51,11 @@ abstract class Behavior{
 	}
 
 	public function onTick() : void{
+
 	}
 
 	public function onEnd() : void{
+
 	}
 
 	public function setMutexBits(int $bit) : void{

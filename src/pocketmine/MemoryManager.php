@@ -298,15 +298,7 @@ class MemoryManager{
 
         $obData = fopen($outputFolder . "/objects.js", "wb+");
 
-        $data = [];
-
-        $objects = [];
-
-        $refCounts = [];
-
-        $instanceCounts = [];
-
-        $staticProperties = [];
+        $data = $objects = $refCounts = $instanceCounts = $staticProperties = [];
         $staticCount = 0;
 
         foreach(get_declared_classes() as $className){

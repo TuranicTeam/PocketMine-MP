@@ -28,7 +28,6 @@ use pocketmine\entity\Mob;
 use pocketmine\math\Vector3;
 
 class RandomLookAroundBehavior extends Behavior{
-
 	/** @var int */
 	protected $lookX = 0;
 	/** @var int */
@@ -46,9 +45,9 @@ class RandomLookAroundBehavior extends Behavior{
 	}
 
 	public function onStart() : void{
-		$d0 = (pi() * 2) * $this->random->nextFloat();
-        $this->lookX = cos($d0);
-        $this->lookZ = sin($d0);
+		$direction = (M_PI * 2) * $this->random->nextFloat();
+        $this->lookX = cos($direction);
+        $this->lookZ = sin($direction);
         $this->idleTime = 20 + $this->random->nextBoundedInt(20);
 	}
 

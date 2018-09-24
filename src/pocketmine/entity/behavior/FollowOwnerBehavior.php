@@ -28,7 +28,6 @@ use pocketmine\entity\Tamable;
 use pocketmine\Player;
 
 class FollowOwnerBehavior extends Behavior{
-
 	/** @var float */
 	protected $speedMultiplier;
 	/** @var int */
@@ -45,9 +44,8 @@ class FollowOwnerBehavior extends Behavior{
 
 	public function canStart() : bool{
 		if(!$this->mob->isTamed()) return false;
-		if($this->mob->getOwningEntity() === null or $this->mob->isLeashed() or $this->mob->isSitting()) return false;
 
-		return true;
+		return !($this->mob->getOwningEntity() === null or $this->mob->isLeashed() or $this->mob->isSitting());
 	}
 
 	public function onStart() : void{

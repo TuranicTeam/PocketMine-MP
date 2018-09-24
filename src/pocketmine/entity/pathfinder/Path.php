@@ -24,12 +24,9 @@ declare(strict_types=1);
 
 namespace pocketmine\entity\pathfinder;
 
-use pocketmine\entity\Entity;
-use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 
 class Path{
-
 	/* @var PathPoint[] */
 	protected $points = [];
 

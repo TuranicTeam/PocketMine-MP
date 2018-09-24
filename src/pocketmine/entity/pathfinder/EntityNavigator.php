@@ -35,7 +35,6 @@ use pocketmine\math\Vector2;
 use pocketmine\math\Vector3;
 
 class EntityNavigator{
-
 	public const PROCESSOR_TYPE_SWIM = 0;
 	public const PROCESSOR_TYPE_WALK = 1;
 
@@ -189,8 +188,8 @@ class EntityNavigator{
 						$y++;
 					}
 				}
-
 				return $y;
+
 			default:
 				return $this->mob->getFloorY();
 		}
@@ -235,9 +234,6 @@ class EntityNavigator{
 
 		if($block1 === null or $block2 === null){
 			return 0;
-		}else{
-			$block1 = $block1->asVector3();
-			$block2 = $block2->asVector3();
 		}
 
 		if($this->mob->canClimb()){
@@ -491,11 +487,7 @@ class EntityNavigator{
 			return false;
 		}elseif(!$onlySee){
 			$block = $this->mob->level->getBlockAt($pos->x, $pos->y - 1, $pos->z);
-			if(($block instanceof Water and !$this->mob->isSwimmer() and $this->avoidsWater) or $block instanceof Lava){ // TODO: Implement this for ZombiePigman and LavaSlime
-				return false;
-			}else{
-				return true;
-			}
+			return !(($block instanceof Water and !$this->mob->isSwimmer() and $this->avoidsWater) or $block instanceof Lava);
 		}
 		return true;
 	}

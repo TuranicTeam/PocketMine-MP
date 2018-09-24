@@ -28,7 +28,6 @@ use pocketmine\block\Block;
 use pocketmine\math\RayTraceResult;
 
 abstract class Throwable extends Projectile{
-
 	public $width = 0.25;
 	public $height = 0.25;
 

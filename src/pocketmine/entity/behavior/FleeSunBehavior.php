@@ -25,15 +25,12 @@ declare(strict_types=1);
 namespace pocketmine\entity\behavior;
 
 use pocketmine\block\Block;
-use pocketmine\block\Grass;
-use pocketmine\entity\Animal;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Mob;
 use pocketmine\math\Vector3;
 use pocketmine\block\Water;
 
 class FleeSunBehavior extends Behavior{
-
 	/** @var float */
 	protected $speedMultiplier = 1.0;
 	/** @var Vector3 */
@@ -71,8 +68,13 @@ class FleeSunBehavior extends Behavior{
 
 	public function findPossibleShelter(Entity $entity) : ?Block{
 		for($i = 0; $i < 10; $i++){
-			$block = $this->mob->level->getBlock($this->mob->add($this->random->nextBoundedInt(20) - 10, $this->random->nextBoundedInt(6) - 3, $this->random->nextBoundedInt(20) - 10));
-			$canSeeSky = $this->mob->level->canSeeSky($block);
+		    $pos        = $this->mob->add($this->random->nextBoundedInt(20) - 10);
+		    $cached     = $this->random->nextBoundedInt(6) - 3;
+		    $addToCache = $this->random->nextBoundedInt(20) - 10;
+
+			$block      = $this->mob->level->getBlock($pos, $cached, $addToCache);
+			$canSeeSky  = $this->mob->level->canSeeSky($block);
+
 			if(!$block->isSolid() and ($block instanceof Water or !$canSeeSky)){
 				return $block;
 			}

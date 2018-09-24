@@ -34,7 +34,6 @@ use pocketmine\math\Vector3;
 use pocketmine\Player;
 
 class Mooshroom extends Cow{
-
 	public const NETWORK_ID = self::MOOSHROOM;
 
 	public function getName() : string{
@@ -62,7 +61,6 @@ class Mooshroom extends Cow{
 				$cow->setHealth($this->getHealth());
 				$cow->setNameTag($this->getNameTag());
 				$cow->setAiEnabled($this->server->mobAiEnabled);
-
 				$item->applyDamage(1);
 
 				for($i = 0; $i < 5; $i++){
@@ -77,5 +75,7 @@ class Mooshroom extends Cow{
 				return parent::onInteract($player, $item, $clickPos, $slot);
 			}
 		}
+		
+        return parent::onInteract($player, $item, $clickPos, $slot);
 	}
 }

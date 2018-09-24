@@ -40,7 +40,6 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 
 class Chicken extends Animal{
-
 	public const NETWORK_ID = self::CHICKEN;
 
 	public $width = 0.4;
@@ -102,7 +101,6 @@ class Chicken extends Animal{
 
 	public function saveNBT() : CompoundTag{
 		$nbt = parent::saveNBT();
-
 		$nbt->setByte("isChickenJockey", intval($this->isChickenJockey()));
 
 		return $nbt;

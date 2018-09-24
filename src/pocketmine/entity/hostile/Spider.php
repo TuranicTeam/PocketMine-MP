@@ -39,7 +39,6 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 
 class Spider extends Monster implements Ageable{
-
 	public const NETWORK_ID = self::SPIDER;
 
 	public $width = 1.4;

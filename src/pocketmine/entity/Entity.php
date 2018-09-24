@@ -403,7 +403,6 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 			'FishingHook',
 			'minecraft:fishing_hook'
 		]);
-
 		Entity::registerEntity(Human::class, true);
 
 		Attribute::init();
@@ -965,12 +964,7 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 	 * @return Entity|null
 	 */
 	public function getOwningEntity() : ?Entity{
-		$eid = $this->getOwningEntityId();
-		if($eid !== null){
-			return $this->server->findEntity($eid);
-		}
-
-		return null;
+		return $this->server->findEntity($this->getOwningEntityId());
 	}
 
 	/**
@@ -1005,12 +999,7 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 	 * @return Entity|null
 	 */
 	public function getTargetEntity() : ?Entity{
-		$eid = $this->getTargetEntityId();
-		if($eid !== null){
-			return $this->server->findEntity($eid);
-		}
-
-		return null;
+        return $this->server->findEntity($this->getTargetEntityId());
 	}
 
 	/**
@@ -1036,12 +1025,12 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 		return $this->savedWithChunk;
 	}
 
-	/**
-	 * Sets whether this entity will be saved when its chunk is unloaded. This can be used to prevent the entity being
-	 * saved to disk.
-	 *
-	 * @param bool $value
-	 */
+    /**
+     * Sets whether this entity will be saved when its chunk is unloaded. This can be used to prevent the entity being
+     * saved to disk.
+     *
+     * @param bool $value
+     */
 	public function setCanSaveWithChunk(bool $value) : void{
 		$this->savedWithChunk = $value;
 	}
@@ -1075,13 +1064,11 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 			new DoubleTag("", $this->y),
 			new DoubleTag("", $this->z)
 		]));
-
 		$nbt->setTag(new ListTag("Motion", [
 			new DoubleTag("", $this->motion->x),
 			new DoubleTag("", $this->motion->y),
 			new DoubleTag("", $this->motion->z)
 		]));
-
 		$nbt->setTag(new ListTag("Rotation", [
 			new FloatTag("", $this->yaw),
 			new FloatTag("", $this->pitch)
@@ -1123,7 +1110,6 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 		}
 
 		$this->setLastDamageCause($source);
-
 		$this->setHealth($this->getHealth() - $source->getFinalDamage());
 	}
 
@@ -1527,41 +1513,31 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 
 			$force = lcg_value() * 0.2 + 0.1;
 
-			if($direction === Facing::WEST){
-				$this->motion->x = -$force;
+			switch ($direction){
+                case Facing::WEST:
+                    $this->motion->x = -$force;
+                    return true;
 
-				return true;
-			}
+                case Facing::EAST:
+                    $this->motion->x = $force;
+                    return true;
 
-			if($direction === Facing::EAST){
-				$this->motion->x = $force;
+                case Facing::DOWN:
+                    $this->motion->y = -$force;
+                    return true;
 
-				return true;
-			}
+                case Facing::UP:
+                    $this->motion->y = $force;
+                    return true;
 
-			if($direction === Facing::DOWN){
-				$this->motion->y = -$force;
+                case Facing::NORTH:
+                    $this->motion->z = -$force;
+                    return true;
 
-				return true;
-			}
-
-			if($direction === Facing::UP){
-				$this->motion->y = $force;
-
-				return true;
-			}
-
-			if($direction === Facing::NORTH){
-				$this->motion->z = -$force;
-
-				return true;
-			}
-
-			if($direction === Facing::SOUTH){
-				$this->motion->z = $force;
-
-				return true;
-			}
+                case Facing::SOUTH:
+                    $this->motion->z = $force;
+                    return true;
+            }
 		}
 
 		return false;
@@ -2327,7 +2303,7 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 		return false;
 	}
 
-	protected function switchLevel(Level $targetLevel) : bool{
+    protected function switchLevel(Level $targetLevel) : bool{
 		if($this->closed){
 			return false;
 		}
@@ -2653,5 +2629,4 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 	public function __toString(){
 		return (new \ReflectionClass($this))->getShortName() . "(" . $this->getId() . ")";
 	}
-
 }

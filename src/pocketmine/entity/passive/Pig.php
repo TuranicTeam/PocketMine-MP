@@ -41,7 +41,6 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 
 class Pig extends Animal{
-
 	public const NETWORK_ID = self::PIG;
 
 	public $width = 0.9;
@@ -110,7 +109,6 @@ class Pig extends Animal{
 
 	public function saveNBT() : CompoundTag{
 		$nbt = parent::saveNBT();
-
 		$nbt->setByte("Saddle", intval($this->isSaddled()));
 
 		return $nbt;

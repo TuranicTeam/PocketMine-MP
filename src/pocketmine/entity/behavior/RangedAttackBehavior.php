@@ -30,7 +30,6 @@ use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 
 class RangedAttackBehavior extends Behavior{
-
 	/** @var float */
 	protected $speedMultiplier = 1.0;
 	/** @var int */
@@ -45,13 +44,13 @@ class RangedAttackBehavior extends Behavior{
 	public function __construct(Mob $mob, float $speedMultiplier, int $minAttackTime, int $maxAttackTime, float $maxAttackDistanceIn){
 		parent::__construct($mob);
 
-		$this->speedMultiplier = $speedMultiplier;
-		$this->minAttackTime = $minAttackTime;
-		$this->maxAttackTime = $maxAttackTime;
+		$this->speedMultiplier     = $speedMultiplier;
+		$this->minAttackTime       = $minAttackTime;
+		$this->maxAttackTime       = $maxAttackTime;
 		$this->maxAttackDistanceIn = $maxAttackDistanceIn;
-		$this->maxAttackDistance = $maxAttackDistanceIn ** 2;
-		$this->rangedAttackTime = -1;
-		$this->mutexBits = 3;
+		$this->maxAttackDistance   = $maxAttackDistanceIn ** 2;
+		$this->rangedAttackTime    = -1;
+		$this->mutexBits           = 3;
 	}
 
 	public function canStart() : bool{
@@ -70,8 +69,11 @@ class RangedAttackBehavior extends Behavior{
 
 	public function onTick() : void{
 		if(!$this->canStart()) return;
+
 		$targetEntity = $this->mob->getTargetEntity();
+
 		if($targetEntity === null) return;
+
 		$dist = $this->mob->distanceSquared($targetEntity);
 
 		if($flag = $this->mob->canSeeEntity($targetEntity)){

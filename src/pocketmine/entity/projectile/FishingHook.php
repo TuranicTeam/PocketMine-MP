@@ -43,7 +43,6 @@ use pocketmine\network\mcpe\protocol\EntityEventPacket;
 use pocketmine\Player;
 
 class FishingHook extends Projectile{
-
 	public const NETWORK_ID = self::FISHING_HOOK;
 
 	/** @var float */

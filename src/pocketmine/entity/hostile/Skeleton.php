@@ -43,7 +43,6 @@ use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\Player;
 
 class Skeleton extends Monster implements RangedAttackerMob{
-
 	public const NETWORK_ID = self::SKELETON;
 
 	public $width = 0.6;

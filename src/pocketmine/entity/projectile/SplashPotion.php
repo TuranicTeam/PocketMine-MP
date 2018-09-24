@@ -38,7 +38,6 @@ use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\utils\Color;
 
 class SplashPotion extends Throwable{
-
 	public const NETWORK_ID = self::SPLASH_POTION;
 
 	protected $gravity = 0.05;
@@ -53,6 +52,7 @@ class SplashPotion extends Throwable{
 	public function saveNBT() : CompoundTag{
 		$nbt = parent::saveNBT();
 		$nbt->setShort("PotionId", $this->getPotionId());
+
 		return $nbt;
 	}
 

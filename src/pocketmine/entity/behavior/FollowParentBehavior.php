@@ -27,7 +27,6 @@ namespace pocketmine\entity\behavior;
 use pocketmine\entity\Animal;
 
 class FollowParentBehavior extends Behavior{
-
 	/** @var float */
 	protected $speedMultiplier;
 	/** @var int */
@@ -68,8 +67,8 @@ class FollowParentBehavior extends Behavior{
 	}
 
 	public function canContinue() : bool{
-		$d = $this->mob->distanceSquared($this->parentAnimal);
-		return $this->mob->isBaby() and $this->parentAnimal->isAlive() and $d >= 9 and $d <= 256;
+		$distancesquared = $this->mob->distanceSquared($this->parentAnimal);
+		return $this->mob->isBaby() and $this->parentAnimal->isAlive() and $distancesquared >= 9 and $distancesquared <= 256;
 	}
 
 	public function onStart() : void{

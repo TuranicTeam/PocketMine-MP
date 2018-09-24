@@ -31,7 +31,6 @@ use pocketmine\entity\Living;
 use pocketmine\nbt\tag\CompoundTag;
 
 class CaveSpider extends Spider{
-
 	public const NETWORK_ID = self::CAVE_SPIDER;
 
 	public $width = 0.7;
