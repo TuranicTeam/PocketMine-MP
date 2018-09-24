@@ -70,6 +70,13 @@ class InventoryTransactionPacket extends DataPacket{
 	 */
 	public $isAnvilPart = false;
 
+	/**
+	 * @var bool
+	 * NOTE: THIS FIELD DOES NOT EXIST IN THE PROTOCOL, it's merely used for convenience for Altay to easily
+	 * determine whether we're doing a enchant transaction.
+	 */
+	public $isEnchantPart = false;
+
 	/** @var NetworkInventoryAction[] */
 	public $actions = [];
 

@@ -27,6 +27,7 @@ namespace pocketmine\network\mcpe\handler;
 use pocketmine\inventory\transaction\action\InventoryAction;
 use pocketmine\inventory\transaction\AnvilTransaction;
 use pocketmine\inventory\transaction\CraftingTransaction;
+use pocketmine\inventory\transaction\EnchantTransaction;
 use pocketmine\inventory\transaction\TransactionValidationException;
 use pocketmine\inventory\transaction\InventoryTransaction;
 use pocketmine\maps\MapData;
@@ -161,6 +162,8 @@ class SimpleSessionHandler extends SessionHandler{
 			case InventoryTransactionPacket::TYPE_NORMAL:
 				if($packet->isAnvilPart){
 					$transaction = new AnvilTransaction($this->player, $actions);
+				}elseif($packet->isEnchantPart){
+					$transaction = new EnchantTransaction($this->player, $actions);
 				}else{
 					$transaction = new InventoryTransaction($this->player, $actions);
 				}
