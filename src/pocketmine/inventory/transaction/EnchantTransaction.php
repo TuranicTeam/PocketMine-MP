@@ -34,7 +34,10 @@ class EnchantTransaction extends InventoryTransaction{
 	}
 
 	public function rebuildAction() : void{
-		$this->actions = array_reverse($this->actions);
+		if(reset($this->actions)->getSourceItem()->isNull()){
+			$this->actions = array_reverse($this->actions);
+		}
+
 		foreach($this->actions as $key => $action){
 			$this->actions[$key] = new EnchantAction($action->getInventory(), $action->getSlot(), $action->getSourceItem(), $action->getTargetItem());
 		}

@@ -34,7 +34,6 @@ class EnchantAction extends InventoryAction{
 	protected $inventory;
 	private $inventorySlot;
 
-
 	public function __construct(Inventory $inventory, int $inventorySlot, Item $sourceItem, Item $targetItem){
 		parent::__construct($sourceItem, $targetItem);
 		$this->inventory = $inventory;
