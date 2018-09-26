@@ -128,6 +128,9 @@ class NetworkInventoryAction{
 					case self::SOURCE_TYPE_ANVIL_RESULT:
 						$packet->isAnvilPart = true;
 						break;
+					case self::SOURCE_TYPE_ENCHANT_OUTPUT:
+						$packet->isEnchantPart = true;
+						break;
 				}
 				break;
 		}
@@ -221,19 +224,19 @@ class NetworkInventoryAction{
 						return new SlotChangeAction($window, $inventorySlot, $this->oldItem, $this->newItem);
 					case self::SOURCE_TYPE_ENCHANT_INPUT:
 						if($window instanceof EnchantInventory){
-							return new EnchantAction($window, 0, $this->oldItem, $this->newItem);
+							return new SlotChangeAction($window, 0, $this->oldItem, $this->newItem);
 						}else{
 							throw new \InvalidStateException("Unexpected inventory, got " . get_class($window));
 						}
 					case self::SOURCE_TYPE_ENCHANT_MATERIAL:
 						if($window instanceof EnchantInventory){
-							return new EnchantAction($window, 1, $this->oldItem, $this->newItem);
+							return new SlotChangeAction($window, 1, $this->oldItem, $this->newItem);
 						}else{
 							throw new \InvalidStateException("Unexpected inventory, got " . get_class($window));
 						}
 					case self::SOURCE_TYPE_ENCHANT_OUTPUT:
 						if($window instanceof EnchantInventory){
-							return new EnchantAction($window, $this->inventorySlot, $this->oldItem, $this->newItem);
+							return new SlotChangeAction($window, $this->inventorySlot, $this->oldItem, $this->newItem);
 						}else{
 							throw new \InvalidStateException("Unexpected inventory, got " . get_class($window));
 						}
