@@ -2453,10 +2453,12 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 
 		$this->inventory->sendHeldItem($this);
 
+		/**
 		if($pos->distanceSquared($this) > 10000){
 			return true;
 		}
-
+		Is this blocking of clicking with items in air?
+**/
 		$target = $this->level->getBlock($pos);
 		$block = $target->getSide($face);
 
