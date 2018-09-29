@@ -83,7 +83,7 @@ class Block extends Position implements BlockIds, Metadatable{
 	public function __construct(int $id, int $variant = 0, string $name = null, int $itemId = null){
 		$this->id = $id;
 
-		if(($variant & $this->getStateBitmask()) !== 0){
+		if(($variant & $this->getStateBitmask()) === 0xff){
 			throw new \InvalidArgumentException("Variant 0x" . dechex($variant) . " collides with state bitmask 0x" . dechex($this->getStateBitmask()));
 		}
 		$this->variant = $variant;

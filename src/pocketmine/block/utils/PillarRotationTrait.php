@@ -28,9 +28,6 @@ use pocketmine\math\Facing;
 
 trait PillarRotationTrait{
 
-	/** @var int */
-	protected $axis = Facing::AXIS_Y;
-
 	/**
 	 * @see Block::writeStateToMeta()
 	 * @return int
@@ -71,6 +68,11 @@ trait PillarRotationTrait{
 			Facing::AXIS_Z => 2,
 			Facing::AXIS_X => 1
 		];
+
+		if($this->axis === null){
+			return $bits[Facing::AXIS_Y] << 2;
+		}
+		
 		return $bits[$this->axis] << 2;
 	}
 }
