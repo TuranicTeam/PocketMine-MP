@@ -57,7 +57,7 @@ use pocketmine\timings\Timings;
 use pocketmine\utils\Binary;
 use pocketmine\utils\Color;
 use pocketmine\utils\UUID;
-
+use pocketmine\event\entity\EntityDeathEvent;
 abstract class Living extends Entity implements Damageable{
 
 	protected $gravity = 0.08;
