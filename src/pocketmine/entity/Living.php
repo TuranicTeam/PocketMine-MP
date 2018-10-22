@@ -25,6 +25,7 @@ namespace pocketmine\entity;
 
 use pocketmine\block\Block;
 use pocketmine\entity\object\LeashKnot;
+use pocketmine\entity\projectile\Arrow;
 use pocketmine\entity\projectile\Projectile;
 use pocketmine\event\entity\EntityDamageByChildEntityEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -664,6 +665,14 @@ abstract class Living extends Entity implements Damageable{
 				$deltaX = $this->x - $e->x;
 				$deltaZ = $this->z - $e->z;
 				$this->knockBack($deltaX, $deltaZ, $source->getKnockBack());
+
+				if($e instanceof Arrow && $e->getPunchKnockback() > 0){
+					$horizontalSpeed = sqrt($e->getMotion()->x ** 2 + $e->getMotion()->z ** 2);
+					if($horizontalSpeed > 0){
+						$multiplier = $e->getPunchKnockback() * 0.6 / $horizontalSpeed;
+						$this->setMotion($this->getMotion()->add($this->getMotion()->x * $multiplier, 0.1, $this->getMotion()->z * $multiplier));
+					}
+				}
 
 				$e->broadcastEntityEvent(EntityEventPacket::ARM_SWING);
 
