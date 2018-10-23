@@ -2340,7 +2340,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 
 		$target = $this->level->getBlock($pos);
 
-		$ev = new PlayerInteractEvent($this, $this->inventory->getItemInHand(), $target, null, $face, PlayerInteractEvent::LEFT_CLICK_BLOCK);
+		$ev = new PlayerInteractEvent($this, $this->inventory->getItemInHand(), $target, null, $face, PlayerInteractEvent::LEFT_CLICK_AIR);
 		if($this->level->checkSpawnProtection($this, $target)){
 			$ev->setCancelled();
 		}

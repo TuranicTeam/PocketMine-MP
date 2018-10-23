@@ -36,6 +36,8 @@ use pocketmine\Player;
 class PlayerInteractEvent extends PlayerEvent implements Cancellable{
 	public const LEFT_CLICK_BLOCK = 0;
 	public const RIGHT_CLICK_BLOCK = 1;
+	public const LEFT_CLICK_AIR = 2;
+	public const RIGHT_CLICK_AIR = 3;
 
 	/** @var Block */
 	protected $blockTouched;
@@ -60,7 +62,7 @@ class PlayerInteractEvent extends PlayerEvent implements Cancellable{
 	 * @param int          $face
 	 * @param int          $action
 	 */
-	public function __construct(Player $player, Item $item, Block $block, ?Vector3 $touchVector, int $face, int $action = PlayerInteractEvent::RIGHT_CLICK_BLOCK){
+	public function __construct(Player $player, Item $item, Block $block, ?Vector3 $touchVector, int $face, int $action = PlayerInteractEvent::RIGHT_CLICK_AIR){
 		$this->player = $player;
 		$this->item = $item;
 		$this->blockTouched = $block;

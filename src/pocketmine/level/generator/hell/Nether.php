@@ -24,7 +24,9 @@ declare(strict_types=1);
 namespace pocketmine\level\generator\hell;
 
 use pocketmine\block\Block;
+use pocketmine\block\BlockFactory;
 use pocketmine\block\Gravel;
+use pocketmine\block\Magma;
 use pocketmine\block\Lava;
 use pocketmine\block\NetherQuartzOre;
 use pocketmine\block\Quartz;
@@ -64,9 +66,10 @@ class Nether extends Generator{
 
 		$ores = new Ore();
 		$ores->setOreTypes([
-			new OreType(new NetherQuartzOre(), 20, 16, 0, 128),
-			new OreType(new SoulSand(), 5, 64, 0, 128),
-			new OreType(new Gravel(), 5, 64, 0, 128),
+			new OreType(BlockFactory::get(Block::NETHER_QUARTZ_ORE), 20, 16, 0, 128),
+			new OreType(BlockFactory::get(Block::MAGMA), 20, 16, 0, 128),
+			new OreType(BlockFactory::get(Block::SOUL_SAND), 5, 64, 0, 128),
+			new OreType(BlockFactory::get(Block::GRAVEL), 5, 64, 0, 128),
 			new OreType(new Lava(), 1, 16, 0, $this->waterHeight)
 		]);
 		$this->populators[] = $ores;
