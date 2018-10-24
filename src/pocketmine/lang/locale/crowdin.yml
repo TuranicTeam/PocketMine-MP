@@ -1,0 +1,6 @@
+files:
+  - source: eng.ini
+    translation: /%three_letters_code%.ini
+    languages_mapping:
+      three_letters_code:
+        zh-CN: chs
