@@ -62,7 +62,7 @@ class PlayerInteractEvent extends PlayerEvent implements Cancellable{
 	 * @param int          $face
 	 * @param int          $action
 	 */
-	public function __construct(Player $player, Item $item, Block $block, ?Vector3 $touchVector, int $face, int $action = PlayerInteractEvent::RIGHT_CLICK_AIR){
+	public function __construct(Player $player, Item $item, Block $block, ?Vector3 $touchVector, int $face, int $action = PlayerInteractEvent::RIGHT_CLICK_BLOCK){
 		$this->player = $player;
 		$this->item = $item;
 		$this->blockTouched = $block;
