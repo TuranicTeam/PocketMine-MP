@@ -48,7 +48,7 @@ class InvisibleBedrock extends Transparent{
 	}
 
 	public function isBreakable(Item $item, Player $player) : bool{
-		if($player->isOp() === true) {
+		if($player->isOp()) {
 			if($player->getGamemode() == 1) {
 			return true;
 			}
