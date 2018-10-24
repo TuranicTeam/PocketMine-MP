@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
+use pocketmine\Player;
 
 class InvisibleBedrock extends Transparent{
 
@@ -46,7 +47,13 @@ class InvisibleBedrock extends Transparent{
 		return 18000000;
 	}
 
-	public function isBreakable(Item $item) : bool{
+	public function isBreakable(Item $item, Player $player) : bool{
+		if($player->isOp() === true) {
+			if($player->getGamemode() == 1) {
+			return true;
+			}
+			} else {
 		return false;
+		}
 	}
 }
