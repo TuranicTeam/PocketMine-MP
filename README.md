@@ -1,19 +1,17 @@
-<h1>Altay<img src="http://fs1.directupload.net/images/180401/urn5z9ic.png" height="64" width="64" align="left"></img></h1>
-<br />
 
-A feature-rich server software for Minecraft: Bedrock/W10 Edition. Altay is a fork of [pmmp](https://github.com/pmmp/PocketMine-MP)
+A feature-rich server software for Minecraft: Bedrock/W10 Edition. TitanWare is a fork of [Altay](https://github.com/TuranicTeam/Atay) 
 
 ------------       
 
-| Jenkins | TravisCI | Discord | Twitter |
-| :---: | :---: | :---: | :---: |
-| [![Build Status](https://altay.minehub.de/job/Altay/badge/icon)](https://altay.minehub.de/job/Altay/) | [![Travis branch](https://img.shields.io/travis/TuranicTeam/Altay/master.svg?style=flat-square)](https://travis-ci.org/TuranicTeam/Altay) | [![Discord](https://img.shields.io/discord/427472879072968714.svg?style=flat-square&label=discord&colorB=7289da)](https://discord.gg/UsuhCFj) | [![Twitter Follow](https://img.shields.io/twitter/follow/TuranicTeam.svg?style=flat-square&logo=twitter&label=Follow)](https://twitter.com/TuranicTeam) |
 
-------------
 
-## Why should I prefer Altay?
 
-Because Altay has more features and improvements than PocketMine-MP:
+
+
+
+## Why should I prefer TitanWare? 
+
+Because TitanWare has more features and improvements than PocketMine-MP:
 
 - Working GameRules
 - Auto Mob Spawning
@@ -42,9 +40,9 @@ And more...
 
 Yes, you can.
 
-- **entengames.net:19132**
-- **play.oyungg.net:19132**
+- **nitrovace.net:19132**
 
-#### Do you need help about Altay?
 
-Join our Discord group and contact us!
+
+
+
