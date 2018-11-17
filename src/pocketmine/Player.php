@@ -853,7 +853,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	 */
 	public function getAddress() : string{
 		if($this->networkSession !== null){
-		return $this->networkSession->getIp();
+		    return $this->networkSession->getIp();
 		}else{
 			throw new \InvalidArgumentException("networkSession seems to be null!");
 		}
