@@ -35,6 +35,7 @@ use pocketmine\entity\behavior\OwnerHurtTargetBehavior;
 use pocketmine\entity\behavior\RandomLookAroundBehavior;
 use pocketmine\entity\behavior\SittingBehavior;
 use pocketmine\entity\behavior\WanderBehavior;
+use pocketmine\entity\behavior\TemptedBehavior;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Tamable;
 use pocketmine\item\Item;
@@ -58,6 +59,7 @@ class Wolf extends Tamable{
 		$this->behaviorPool->setBehavior(5, new WanderBehavior($this, 1.0));
 		$this->behaviorPool->setBehavior(6, new LookAtPlayerBehavior($this, 8.0));
 		$this->behaviorPool->setBehavior(7, new RandomLookAroundBehavior($this));
+		$this->behaviorPool->setBehavior(8, new TemptedBehavior($this, [Item::STEAK], 1.2));
 
 		$this->targetBehaviorPool->setBehavior(0, new HurtByTargetBehavior($this));
 		$this->targetBehaviorPool->setBehavior(1, new OwnerHurtByTargetBehavior($this));
@@ -98,7 +100,6 @@ class Wolf extends Tamable{
 						$this->setSitting();
 						$this->setAngry(false);
 						$this->setAttackDamage(4);
-
 						$this->broadcastEntityEvent(EntityEventPacket::TAME_SUCCESS);
 					}else{
 						$this->broadcastEntityEvent(EntityEventPacket::TAME_FAIL);
@@ -131,5 +132,9 @@ class Wolf extends Tamable{
 
 	public function getLivingSound() : ?string{
 		return $this->isAngry() ? "mob.wolf.growl" : "mob.wolf.bark";
+	}
+
+	public function getEatItems(): array{
+		return [Item::STEAK];
 	}
 }

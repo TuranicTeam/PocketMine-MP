@@ -97,4 +97,8 @@ class Cow extends Animal{
 	public function getLivingSound() : ?string{
 		return "mob.cow.say";
 	}
+
+	public function getEatItems(): array{
+		return [Item::WHEAT];
+	}
 }

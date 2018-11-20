@@ -132,4 +132,8 @@ class Chicken extends Animal{
 	public function getLivingSound() : ?string{
 		return "mob.chicken.say";
 	}
+
+	public function getEatItems(): array{
+		return [Item::WHEAT_SEEDS];
+	}
 }

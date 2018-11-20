@@ -123,4 +123,8 @@ class Pig extends Animal{
 	public function getLivingSound() : ?string{
 		return "mob.pig.say";
 	}
+
+	public function getEatItems(): array{
+		return [Item::WHEAT];
+	}
 }

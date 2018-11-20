@@ -174,4 +174,8 @@ class Sheep extends Animal{
 			// TODO: enlarge baby
 		}
 	}
+
+	public function getEatItems(): array{
+		return [Item::WHEAT];
+	}
 }

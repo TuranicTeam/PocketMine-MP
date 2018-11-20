@@ -61,7 +61,7 @@ class TemptedBehavior extends Behavior{
 		if($player instanceof Player){
 			if(in_array($player->getInventory()->getItemInHand()->getId(), $this->temptItems)){
 				$this->temptingPlayer = $player;
-
+				$this->mob->setGenericFlag($this->mob::DATA_FLAG_INTERESTED, true);
 				return true;
 			}
 		}
@@ -83,6 +83,7 @@ class TemptedBehavior extends Behavior{
 
 		if($this->temptingPlayer->distanceSquared($this->mob) < 6.25){
 			$this->mob->getNavigator()->clearPath();
+			$this->mob->setGenericFlag($this->mob::DATA_FLAG_INTERESTED, false);
 		}else{
 			$this->mob->getNavigator()->tryMoveTo($this->temptingPlayer, $this->speedMultiplier);
 		}
