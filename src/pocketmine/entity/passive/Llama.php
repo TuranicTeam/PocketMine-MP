@@ -48,7 +48,7 @@ class Llama extends Animal{
 
     protected function addBehaviors() : void{
         $this->behaviorPool->setBehavior(0, new FloatBehavior($this));
-        $this->behaviorPool->setBehavior(1, new PanicBehavior($this, 1.0));
+        $this->behaviorPool->setBehavior(1, new PanicBehavior($this, 2.0));
         $this->behaviorPool->setBehavior(2, new MateBehavior($this, 1.0));
         $this->behaviorPool->setBehavior(3, new TemptedBehavior($this, [Item::WHEAT, Item::WHEAT_BLOCK], 0.75));
         $this->behaviorPool->setBehavior(4, new FollowParentBehavior($this, 1.25));
@@ -62,7 +62,7 @@ class Llama extends Animal{
         $this->setMovementSpeed(0.2);
         $this->setFollowRange(100);
         $this->setChested(boolval($nbt->getByte("Chest", 0)));
-        $this->setVariant($nbt->getByte("Variant", mt_rand(1, 4)));
+        $this->setVariant($nbt->getByte("Variant", mt_rand(0, 3)));
 
         parent::initEntity($nbt);
     }
@@ -90,13 +90,18 @@ class Llama extends Animal{
     }
 
     public function getXpDropAmount() : int{
-        return rand(1, 3);
+        return mt_rand(1, 3);
     }
 
     public function getDrops() : array{
-        return [
-            ItemFactory::get(Item::LEATHER, 0, rand(0, 2))
+        $drops = [
+            ItemFactory::get(Item::LEATHER, 0, mt_rand(0, 2))
         ];
+		if($this->isChested()){
+			$drops[] = ItemFactory::get(Item::CHEST)
+		}
+		
+		return $drops;
     }
 
     public function isChested() : bool{
