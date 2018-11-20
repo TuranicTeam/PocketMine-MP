@@ -59,7 +59,7 @@ class TemptedBehavior extends Behavior{
 		$player = $this->mob->level->getNearestEntity($this->mob, sqrt(10), Player::class);
 
 		if($player instanceof Player){
-			if(in_array($player->getInventory()->getItemInHand()->getId(), $this->temptItems)){
+			if(in_array($player->getInventory()->getItemInHand()->getId(), $this->temptItems) && $this->mob->getRiddenByEntity() === null){
 				$this->temptingPlayer = $player;
 				$this->mob->setGenericFlag($this->mob::DATA_FLAG_INTERESTED, true);
 				return true;

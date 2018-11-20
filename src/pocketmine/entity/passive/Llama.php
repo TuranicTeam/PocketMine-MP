@@ -53,7 +53,7 @@ class Llama extends Animal{
         $this->behaviorPool->setBehavior(3, new TemptedBehavior($this, [Item::WHEAT, Item::WHEAT_BLOCK], 0.75));
         $this->behaviorPool->setBehavior(4, new FollowParentBehavior($this, 1.25));
         $this->behaviorPool->setBehavior(5, new WanderBehavior($this, 1.2));
-        //$this->behaviorPool->setBehavior(6, new LookAtPlayerBehavior($this, 2.0));
+        $this->behaviorPool->setBehavior(6, new LookAtPlayerBehavior($this, 2.0));
         $this->behaviorPool->setBehavior(7, new RandomLookAroundBehavior($this));
     }
 
@@ -62,8 +62,7 @@ class Llama extends Animal{
         $this->setMovementSpeed(0.2);
         $this->setFollowRange(100);
         $this->setChested(boolval($nbt->getByte("Chest", 0)));
-        $this->setVariant(mt_rand(1, 4));
-        $this->setColor(mt_rand(1, 4));
+        $this->setVariant($nbt->getByte("Variant", mt_rand(1, 4)));
 
         parent::initEntity($nbt);
     }
@@ -82,20 +81,9 @@ class Llama extends Animal{
                     }
                 }
                 return true;
-            }
-            /*
-            if($item->getId() === Item::CARPET){
-                if(!$this->isColored()) {
-                    $this->setColor(mt_rand(2, 4));
-                    if ($player->isSurvival()) {
-                        $item->pop();
-                    }
-                }
-                return true;
-            }elseif($this->isColored() and $this->riddenByEntity === null){
+            }elseif($this->riddenByEntity === null){
                 $player->mountEntity($this);
-                return true;
-            }*/
+            }
         }
 
         return parent::onInteract($player, $item, $clickPos, $slot);
@@ -117,19 +105,6 @@ class Llama extends Animal{
 
     public function setChested(bool $value = true) : void{
         $this->setGenericFlag(self::DATA_FLAG_CHESTED, $value);
-    }
-
-
-    public function isColored(): bool{
-        return $this->propertyManager->getInt(self::DATA_COLOR_2) !== null;
-    }
-
-    public function setColor(int $color): void{
-        $this->propertyManager->setInt(self::DATA_MINECART_DISPLAY_BLOCK, (mt_rand(2,3) | (self::DATA_MINECART_DISPLAY_BLOCK << 16)));
-    }
-
-    public function getColor(): ?int{
-        return $this->propertyManager->getInt(self::DATA_COLOR_2) ?? null;
     }
 
     public function setVariant(int $variant): void{
