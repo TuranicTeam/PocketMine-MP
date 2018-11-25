@@ -216,5 +216,5 @@ class Villager extends Mob implements NPC, Ageable{
 	
 	public function getEatableItems(): array{
         return [];
-    }
+  }
 }
