@@ -95,13 +95,14 @@ class Llama extends Animal{
 
     public function getDrops() : array{
         $drops = [
-            ItemFactory::get(Item::LEATHER, 0, mt_rand(0, 2))
+            ItemFactory::get(Item::LEATHER, 0, rand(0, 2))
         ];
-		if($this->isChested()){
-			$drops[] = ItemFactory::get(Item::CHEST)
-		}
-		
-		return $drops;
+
+        if($this->isChested()){
+            $drops[] = ItemFactory::get(Item::CHEST);
+        }
+
+        return $drops;
     }
 
     public function isChested() : bool{
@@ -118,8 +119,9 @@ class Llama extends Animal{
 
     public function saveNBT() : CompoundTag{
         $nbt = parent::saveNBT();
-
         $nbt->setByte("Chest", intval($this->isChested()));
+        $nbt->setByte("Variant", $this->propertyManager->getInt(self::DATA_VARIANT));
+
         return $nbt;
     }
 
@@ -131,7 +133,7 @@ class Llama extends Animal{
         return "mob.llama.idle";
     }
 
-    public function getEatItems(): array{
+    public function getEatableItems(): array{
         return [Item::WHEAT, Item::WHEAT_BLOCK];
     }
 }

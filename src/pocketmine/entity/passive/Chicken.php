@@ -90,7 +90,7 @@ class Chicken extends Animal{
 	}
 
 	public function getXpDropAmount() : int{
-		return rand(1, 3);
+		return mt_rand(1, 3);
 	}
 
 	public function getDrops() : array{
@@ -102,7 +102,6 @@ class Chicken extends Animal{
 
 	public function saveNBT() : CompoundTag{
 		$nbt = parent::saveNBT();
-
 		$nbt->setByte("isChickenJockey", intval($this->isChickenJockey()));
 
 		return $nbt;
@@ -133,7 +132,7 @@ class Chicken extends Animal{
 		return "mob.chicken.say";
 	}
 
-	public function getEatItems(): array{
+	public function getEatableItems(): array{
 		return [Item::WHEAT_SEEDS];
 	}
 }

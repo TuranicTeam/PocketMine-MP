@@ -34,7 +34,6 @@ use pocketmine\entity\behavior\RandomLookAroundBehavior;
 use pocketmine\entity\behavior\TemptedBehavior;
 use pocketmine\entity\behavior\WanderBehavior;
 use pocketmine\item\Bucket;
-use pocketmine\item\MilkBucket;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
 use pocketmine\math\Vector3;
@@ -98,7 +97,7 @@ class Cow extends Animal{
 		return "mob.cow.say";
 	}
 
-	public function getEatItems(): array{
+	public function getEatableItems(): array{
 		return [Item::WHEAT];
 	}
 }

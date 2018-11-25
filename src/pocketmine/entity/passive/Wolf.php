@@ -134,7 +134,7 @@ class Wolf extends Tamable{
 		return $this->isAngry() ? "mob.wolf.growl" : "mob.wolf.bark";
 	}
 
-	public function getEatItems(): array{
+	public function getEatableItems(): array{
 		return [Item::STEAK];
 	}
 }

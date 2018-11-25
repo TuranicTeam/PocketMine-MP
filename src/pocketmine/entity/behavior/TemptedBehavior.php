@@ -83,7 +83,6 @@ class TemptedBehavior extends Behavior{
 
 		if($this->temptingPlayer->distanceSquared($this->mob) < 6.25){
 			$this->mob->getNavigator()->clearPath();
-			$this->mob->setGenericFlag($this->mob::DATA_FLAG_INTERESTED, false);
 		}else{
 			$this->mob->getNavigator()->tryMoveTo($this->temptingPlayer, $this->speedMultiplier);
 		}
@@ -92,6 +91,7 @@ class TemptedBehavior extends Behavior{
 	public function onEnd() : void{
 		$this->delayTemptCounter = 100;
 		$this->temptingPlayer = null;
+        $this->mob->setGenericFlag($this->mob::DATA_FLAG_INTERESTED, false);
 		$this->mob->pitch = 0;
 		$this->mob->getNavigator()->clearPath();
 	}

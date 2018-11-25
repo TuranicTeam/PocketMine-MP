@@ -50,7 +50,7 @@ abstract class Animal extends Mob implements Ageable{
 	}
 
 	public function isBreedingItem(Item $item) : bool{
-		return in_array($item->getId(), $this->getEatItems());
+		return in_array($item->getId(), $this->getEatableItems());
 	}
 
 	public function onInteract(Player $player, Item $item, Vector3 $clickPos, int $slot) : bool{
@@ -113,5 +113,5 @@ abstract class Animal extends Mob implements Ageable{
 		return $nbt;
 	}
 
-	abstract public function getEatItems(): array;
+	abstract public function getEatableItems(): array;
 }

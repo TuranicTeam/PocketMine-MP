@@ -87,6 +87,7 @@ class Pig extends Animal{
 				return true;
 			}
 		}
+
 		return parent::onInteract($player, $item, $clickPos, $slot);
 	}
 
@@ -110,7 +111,6 @@ class Pig extends Animal{
 
 	public function saveNBT() : CompoundTag{
 		$nbt = parent::saveNBT();
-
 		$nbt->setByte("Saddle", intval($this->isSaddled()));
 
 		return $nbt;
@@ -124,7 +124,7 @@ class Pig extends Animal{
 		return "mob.pig.say";
 	}
 
-	public function getEatItems(): array{
-		return [Item::WHEAT];
+	public function getEatableItems(): array{
+		return [Item::POTATO, Item::CARROT, Item::BEETROOT];
 	}
 }

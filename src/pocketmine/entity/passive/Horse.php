@@ -133,7 +133,7 @@ class Horse extends Animal{
 		return "mob.horse.say";
 	}
 	
-	public function getEatItems(): array{
-		return [Item::WHEAT];
+	public function getEatableItems(): array{
+		return [Item::GOLDEN_APPLE, Item::ENCHANTED_GOLDEN_APPLE, Item::GOLDEN_CARROT];
 	}
 }

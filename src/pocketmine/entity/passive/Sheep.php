@@ -128,7 +128,6 @@ class Sheep extends Animal{
 
 	public function saveNBT() : CompoundTag{
 		$nbt = parent::saveNBT();
-
 		$nbt->setByte("Sheared", intval($this->isSheared()));
 		$nbt->setByte("Color", intval($this->propertyManager->getByte(self::DATA_COLOR)));
 
@@ -175,7 +174,7 @@ class Sheep extends Animal{
 		}
 	}
 
-	public function getEatItems(): array{
+	public function getEatableItems(): array{
 		return [Item::WHEAT];
 	}
 }
