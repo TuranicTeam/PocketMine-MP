@@ -31,8 +31,6 @@ class TemptedBehavior extends Behavior{
 
 	/** @var float */
 	protected $speedMultiplier;
-	/** @var int[] */
-	protected $temptItems;
 	/** @var int */
 	protected $delayTemptCounter = 0;
 	/** @var Player */
@@ -40,10 +38,9 @@ class TemptedBehavior extends Behavior{
 	/** @var bool */
 	protected $scaredByPlayerMovement = false;
 
-	public function __construct(Mob $mob, array $temptItemIds, float $speedMultiplier, bool $scaredByPlayerMovement = false){
+	public function __construct(Mob $mob, float $speedMultiplier, bool $scaredByPlayerMovement = false){
 		parent::__construct($mob);
 
-		$this->temptItems = $temptItemIds;
 		$this->speedMultiplier = $speedMultiplier;
 		$this->scaredByPlayerMovement = $scaredByPlayerMovement;
 
@@ -59,7 +56,7 @@ class TemptedBehavior extends Behavior{
 		$player = $this->mob->level->getNearestEntity($this->mob, sqrt(10), Player::class);
 
 		if($player instanceof Player){
-			if(in_array($player->getInventory()->getItemInHand()->getId(), $this->temptItems) && $this->mob->getRiddenByEntity() === null){
+			if(in_array($player->getInventory()->getItemInHand()->getId(), $this->mob->getEatableItems()) && $this->mob->getRiddenByEntity() === null){
 				$this->temptingPlayer = $player;
 				$this->mob->setGenericFlag($this->mob::DATA_FLAG_INTERESTED, true);
 				return true;

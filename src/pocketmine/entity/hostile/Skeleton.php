@@ -128,4 +128,8 @@ class Skeleton extends Monster implements RangedAttackerMob{
 	public function getLivingSound() : ?string{
 		return "mob.skeleton.say";
 	}
+
+    public function getEatableItems(): array{
+        return [];
+    }
 }

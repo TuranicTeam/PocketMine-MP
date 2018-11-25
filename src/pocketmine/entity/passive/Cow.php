@@ -51,7 +51,7 @@ class Cow extends Animal{
 		$this->behaviorPool->setBehavior(0, new FloatBehavior($this));
 		$this->behaviorPool->setBehavior(1, new PanicBehavior($this, 2.0));
 		$this->behaviorPool->setBehavior(2, new MateBehavior($this, 1.0));
-		$this->behaviorPool->setBehavior(3, new TemptedBehavior($this, [Item::WHEAT], 1.25));
+		$this->behaviorPool->setBehavior(3, new TemptedBehavior($this, 1.25));
 		$this->behaviorPool->setBehavior(4, new FollowParentBehavior($this, 1.25));
 		$this->behaviorPool->setBehavior(5, new WanderBehavior($this, 1.0));
 		$this->behaviorPool->setBehavior(6, new LookAtPlayerBehavior($this, 6.0));

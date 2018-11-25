@@ -112,6 +112,4 @@ abstract class Animal extends Mob implements Ageable{
 
 		return $nbt;
 	}
-
-	abstract public function getEatableItems(): array;
 }

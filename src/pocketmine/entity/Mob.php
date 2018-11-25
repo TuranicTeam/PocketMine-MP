@@ -264,7 +264,7 @@ abstract class Mob extends Living{
 		$collide = $block->isSolid() or ($this->height >= 1 and $blockUp->isSolid());
 
 		if($collide){
-			if($bb !== null and $bb->maxY <= $this->y){
+			if($bb->maxY <= $this->y){
 				$collide = false;
 			}
 		}
@@ -390,4 +390,6 @@ abstract class Mob extends Living{
 	public function canSpawnHere() : bool{
 		return parent::canSpawnHere() and $this->getBlockPathWeight($this) > 0;
 	}
+
+    abstract public function getEatableItems(): array;
 }

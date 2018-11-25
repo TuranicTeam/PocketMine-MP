@@ -77,7 +77,6 @@ class Creeper extends Monster implements Ageable{
 
 	public function saveNBT() : CompoundTag{
 		$nbt = parent::saveNBT();
-
 		$nbt->setByte("ignited", intval($this->isIgnited()));
 		$nbt->setByte("powered", intval($this->isPowered()));
 		$nbt->setShort("Fuse", $this->fuseTime);
@@ -204,4 +203,8 @@ class Creeper extends Monster implements Ageable{
 	protected function isValidLightLevel() : bool{
 		return true;
 	}
+
+    public function getEatableItems(): array{
+        return [];
+    }
 }

@@ -59,7 +59,7 @@ class Wolf extends Tamable{
 		$this->behaviorPool->setBehavior(5, new WanderBehavior($this, 1.0));
 		$this->behaviorPool->setBehavior(6, new LookAtPlayerBehavior($this, 8.0));
 		$this->behaviorPool->setBehavior(7, new RandomLookAroundBehavior($this));
-		$this->behaviorPool->setBehavior(8, new TemptedBehavior($this, [Item::STEAK], 1.2));
+		$this->behaviorPool->setBehavior(8, new TemptedBehavior($this, 1.2));
 
 		$this->targetBehaviorPool->setBehavior(0, new HurtByTargetBehavior($this));
 		$this->targetBehaviorPool->setBehavior(1, new OwnerHurtByTargetBehavior($this));
@@ -135,6 +135,6 @@ class Wolf extends Tamable{
 	}
 
 	public function getEatableItems(): array{
-		return [Item::STEAK];
+		return [Item::STEAK, Item::RAW_PORKCHOP, Item::COOKED_PORKCHOP, Item::CHICKEN, Item::COOKED_CHICKEN, Item::RAW_BEEF, Item::ROTTEN_FLESH];
 	}
 }

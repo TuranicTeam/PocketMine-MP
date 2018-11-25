@@ -106,4 +106,8 @@ class Zombie extends Monster implements Ageable{
 	public function getLivingSound() : ?string{
 		return "mob.zombie.say";
 	}
+
+    public function getEatableItems(): array{
+        return [];
+    }
 }

@@ -55,7 +55,7 @@ class Sheep extends Animal{
 		$this->behaviorPool->setBehavior(0, new FloatBehavior($this));
 		$this->behaviorPool->setBehavior(1, new PanicBehavior($this, 1.25));
 		$this->behaviorPool->setBehavior(2, new MateBehavior($this, 1.0));
-		$this->behaviorPool->setBehavior(3, new TemptedBehavior($this, [Item::WHEAT], 1.1));
+		$this->behaviorPool->setBehavior(3, new TemptedBehavior($this, 1.1));
 		$this->behaviorPool->setBehavior(4, new FollowParentBehavior($this, 1.1));
 		$this->behaviorPool->setBehavior(5, new EatBlockBehavior($this));
 		$this->behaviorPool->setBehavior(6, new WanderBehavior($this, 1.0));
@@ -67,8 +67,8 @@ class Sheep extends Animal{
 		$this->setMaxHealth(8);
 		$this->setMovementSpeed(0.23000000417232513);
 		$this->setFollowRange(10);
+        $this->setSheared(boolval($nbt->getByte("Sheared", 0)));
 		$this->propertyManager->setByte(self::DATA_COLOR, $nbt->getByte("Color", $this->getRandomColor($this->level->random)));
-		$this->setSheared(boolval($nbt->getByte("Sheared", 0)));
 
 		parent::initEntity($nbt);
 	}
