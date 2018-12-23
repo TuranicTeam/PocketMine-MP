@@ -96,7 +96,7 @@ class Zombie extends Monster implements Ageable{
 
 	public function entityBaseTick(int $diff = 1) : bool{
 		if(!$this->isOnFire() and $this->level->isDayTime() and !$this->isImmobile()){
-			if(!$this->isUnderwater() and $this->level->canSeeSky($this)){
+			if(!$this->isInsideOfWater() and $this->level->canSeeSky($this)){
 				$this->setOnFire(5);
 			}
 		}

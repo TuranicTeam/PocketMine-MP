@@ -29,6 +29,7 @@ declare(strict_types=1);
 namespace pocketmine\entity;
 
 use pocketmine\block\Block;
+use pocketmine\block\Lava;
 use pocketmine\block\Water;
 use pocketmine\entity\hostile\Blaze;
 use pocketmine\entity\hostile\CaveSpider;
@@ -1960,14 +1961,14 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 
 	public function moveFlying(float $strafe, float $forward, float $friction) : bool{
 		$f = $strafe * $strafe + $forward * $forward;
-		if($f >= 1.0){
+		if($f >= self::MOTION_THRESHOLD){
 			$f = sqrt($f);
 
 			if($f < 1) $f = 1;
 
 			$f = $friction / $f;
-			$strafe *= $f;
-			$forward *= $f;
+			//$strafe *= $f;
+			//$forward *= $f;
 
 			$f1 = sin($this->yaw * pi() / 180);
 			$f2 = cos($this->yaw * pi() / 180);
@@ -2009,6 +2010,18 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 		$block = $this->level->getBlockAt((int) floor($this->x), (int) floor($y = ($this->y + $this->getEyeHeight())), (int) floor($this->z));
 
 		return $block->isSolid() and !$block->isTransparent() and $block->collidesWithBB($this->getBoundingBox());
+	}
+
+	public function isInsideOfLava() : bool{
+		$block = $this->level->getBlockAt((int) floor($this->x), (int) floor($y = ($this->y + $this->getEyeHeight())), (int) floor($this->z));
+
+		return $block instanceof Lava;
+	}
+
+	public function isInsideOfWater() : bool{
+		$block = $this->level->getBlockAt((int) floor($this->x), (int) floor($y = ($this->y + $this->getEyeHeight())), (int) floor($this->z));
+
+		return $block instanceof Water;
 	}
 
 	public function move(float $dx, float $dy, float $dz) : void{

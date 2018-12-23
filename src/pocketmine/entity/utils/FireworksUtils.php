@@ -35,6 +35,7 @@ use pocketmine\nbt\tag\ListTag;
 use pocketmine\utils\Random;
 
 class FireworksUtils{
+
 	public const COLOR_BLACK = 0;
 	public const COLOR_RED = 1;
 	public const COLOR_GREEN = 2;

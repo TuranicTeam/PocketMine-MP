@@ -651,11 +651,7 @@ class EntityNavigator{
 		}
 
 		if($this->movePoint !== null){
-			$this->mob->lookAt(new Vector3($this->movePoint->x + 0.5, $this->mob->y, $this->movePoint->y + 0.5));
-			if(!$this->mob->moveForward($this->speedMultiplier)){
-				$this->clearPath();
-				return;
-			}
+			$this->mob->getMoveHelper()->moveTo($this->movePoint->x + 0.5, $this->movePoint->height, $this->movePoint->y + 0.5, $this->speedMultiplier);
 
 			$currentPos = $this->mob->floor();
 
@@ -688,7 +684,6 @@ class EntityNavigator{
 	 */
 	public function setSpeedMultiplier(float $speedMultiplier) : void{
 		$this->speedMultiplier = $speedMultiplier;
-		$this->mob->setMovementSpeed($this->mob->getDefaultMovementSpeed() * $this->speedMultiplier);
 	}
 
 	/**
@@ -704,5 +699,4 @@ class EntityNavigator{
 	public function setProcessorType(int $processorType) : void{
 		$this->processorType = $processorType;
 	}
-
 }

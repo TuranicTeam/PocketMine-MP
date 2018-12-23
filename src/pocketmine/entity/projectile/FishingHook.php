@@ -138,7 +138,7 @@ class FishingHook extends Projectile{
 				$this->flagForDespawn();
 			}
 
-			if($this->isUnderwater()){
+			if($this->isInsideOfWater()){
 				$f6 = 0.92;
 
 				if($this->onGround or $this->isCollidedHorizontally){
@@ -305,7 +305,7 @@ class FishingHook extends Projectile{
 	}
 
 	public function applyGravity() : void{
-		if(!$this->isUnderwater()){
+		if(!$this->isInsideOfWater()){
 			parent::applyGravity();
 		}else{
 			$this->motion->y += $this->gravity;

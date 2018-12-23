@@ -25,20 +25,15 @@ declare(strict_types=1);
 namespace pocketmine\entity;
 
 
+use pocketmine\block\Liquid;
 use pocketmine\entity\behavior\BehaviorPool;
+use pocketmine\entity\helper\EntityJumpHelper;
+use pocketmine\entity\helper\EntityMoveHelper;
 use pocketmine\entity\pathfinder\EntityNavigator;
-use pocketmine\item\Lead;
-use pocketmine\item\Item;
-use pocketmine\level\Level;
-use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
-use pocketmine\math\VoxelRayTrace;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\network\mcpe\protocol\EntityEventPacket;
-use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
-use pocketmine\Player;
 use pocketmine\timings\Timings;
 
 abstract class Mob extends Living{
@@ -61,7 +56,19 @@ abstract class Mob extends Living{
 	/** @var int */
 	protected $livingSoundTime = 0;
 
-	protected $aiMoveSpeed = 1.0;
+	protected $moveForward = 0.0;
+	protected $moveStrafing = 0.0;
+
+	protected $landMovementFactor = 0.0;
+	protected $jumpMovementFactor = 0.02;
+
+	protected $isJumping = false;
+	protected $jumpTicks = 0;
+
+	/** @var EntityMoveHelper */
+	protected $moveHelper;
+	/** @var EntityJumpHelper */
+	protected $jumpHelper;
 
 	/**
 	 * @return Vector3
@@ -86,18 +93,68 @@ abstract class Mob extends Living{
 		$this->homePosition = $homePosition;
 	}
 
-	/**
-	 * @return float
-	 */
-	public function getAiMoveSpeed() : float{
-		return $this->aiMoveSpeed;
+	public function getAIMoveSpeed() : float{
+		return $this->landMovementFactor;
+	}
+
+	public function setAIMoveSpeed(float $value) : void{
+		$this->landMovementFactor = $value;
 	}
 
 	/**
-	 * @param float $aiMoveSpeed
+	 * @return float
 	 */
-	public function setAiMoveSpeed(float $aiMoveSpeed) : void{
-		$this->aiMoveSpeed = $aiMoveSpeed;
+	public function getMoveForward() : float{
+		return $this->moveForward;
+	}
+
+	/**
+	 * @param float $moveForward
+	 */
+	public function setMoveForward(float $moveForward) : void{
+		$this->moveForward = $moveForward;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getMoveStrafing() : float{
+		return $this->moveStrafing;
+	}
+
+	/**
+	 * @param float $moveStrafing
+	 */
+	public function setMoveStrafing(float $moveStrafing) : void{
+		$this->moveStrafing = $moveStrafing;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isJumping() : bool{
+		return $this->isJumping;
+	}
+
+	/**
+	 * @param bool $isJumping
+	 */
+	public function setJumping(bool $isJumping) : void{
+		$this->isJumping = $isJumping;
+	}
+
+	/**
+	 * @return EntityMoveHelper
+	 */
+	public function getMoveHelper() : EntityMoveHelper{
+		return $this->moveHelper;
+	}
+
+	/**
+	 * @return EntityJumpHelper
+	 */
+	public function getJumpHelper() : EntityJumpHelper{
+		return $this->jumpHelper;
 	}
 
 	/**
@@ -109,11 +166,13 @@ abstract class Mob extends Living{
 		$this->targetBehaviorPool = new BehaviorPool();
 		$this->behaviorPool = new BehaviorPool();
 		$this->navigator = new EntityNavigator($this);
+		$this->moveHelper = new EntityMoveHelper($this);
+		$this->jumpHelper = new EntityJumpHelper($this);
 
 		$this->addBehaviors();
-
-		$this->setDefaultMovementSpeed($this->getMovementSpeed());
 		$this->setImmobile(boolval($nbt->getByte("NoAI", 1)));
+
+		$this->stepHeight = 0.6;
 	}
 
 	/**
@@ -136,6 +195,10 @@ abstract class Mob extends Living{
 		$hasUpdate = parent::entityBaseTick($diff);
 
 		if(!$this->isImmobile()){
+			if($this->jumpTicks > 0){
+				$this->jumpTicks--;
+			}
+
 			$this->onBehaviorUpdate();
 
 			if($this->isAlive() and $this->random->nextBoundedInt(1000) < $this->livingSoundTime++){
@@ -180,13 +243,30 @@ abstract class Mob extends Living{
 		$this->navigator->onNavigateUpdate();
 		Timings::$mobNavigationUpdateTimer->stopTiming();
 
+		if($this->isJumping){
+			if($this->isInsideOfWater()){
+				$this->handleWaterMovement();
+			}elseif($this->isInsideOfLava()){
+				$this->handleWaterMovement(); // same
+			}elseif($this->onGround and $this->jumpTicks === 0){
+				$this->jump();
+				$this->jumpTicks = 10;
+			}
+		}else{
+			$this->jumpTicks = 0;
+		}
+
+		$this->moveStrafing *= 0.98;
+		$this->moveForward *= 0.98;
+		$this->moveWithHeading($this->moveStrafing, $this->moveForward);
+
+		$this->moveHelper->onUpdate();
+		$this->clearSightCache();
 		if($this->getLookPosition() !== null){
 			$this->lookAt($this->getLookPosition(), true);
 			$this->lookPosition = null;
 		}
-
-		$this->handleWaterMovement();
-		$this->clearSightCache();
+		$this->jumpHelper->doJump();
 	}
 
 	/**
@@ -286,9 +366,10 @@ abstract class Mob extends Living{
 		$collide = $block->isSolid() or ($this->height >= 1 and $blockUp->isSolid());
 
 		if($collide){
-			if($bb !== null and $bb->maxY <= $this->y){
-				$collide = false;
-			}
+			//if($bb !== null and $bb->maxY <= $this->y){
+			$collide = false;
+			$this->stepHeight = 1.0;
+			//}
 		}
 
 		if(!$collide){
@@ -306,19 +387,6 @@ abstract class Mob extends Living{
 				$this->jumpCooldown = 20;
 				return true;
 			}elseif((!$blockUp->isSolid() and !($this->height > 1 and $blockUpUp->isSolid()) or $block->isPassable($this)) or $this->isSwimmer()){
-				$f = $this->getJumpVelocity() + 0.02;
-				if($bb instanceof AxisAlignedBB){
-					$yDiff = $bb->maxY - $bb->minY;
-					if($yDiff < 1){
-						$f *= $yDiff;
-
-						if($f < 0.1){
-							$f = 0.1 + $this->gravity; // :/
-						}
-					}
-				}
-
-				$this->motion->y = $f;
 				$this->jumpCooldown = 20;
 				return true;
 			}else{
@@ -340,20 +408,6 @@ abstract class Mob extends Living{
 	 */
 	public function canBePushed() : bool{
 		return !$this->isImmobile();
-	}
-
-	/**
-	 * @param float $value
-	 */
-	public function setDefaultMovementSpeed(float $value) : void{
-		$this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED)->setDefaultValue($value);
-	}
-
-	/**
-	 * @return float
-	 */
-	public function getDefaultMovementSpeed() : float{
-		return $this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED)->getDefaultValue();
 	}
 
 	public function updateLeashedState() : void{
@@ -411,5 +465,68 @@ abstract class Mob extends Living{
 	 */
 	public function canSpawnHere() : bool{
 		return parent::canSpawnHere() and $this->getBlockPathWeight($this) > 0;
+	}
+
+	public function moveWithHeading(float $strafe, float $forward){
+		if(!$this->isInsideOfWater()){
+			if(!$this->isInsideOfLava()){
+				$f4 = 0.91;
+
+				if($this->onGround){
+					$f4 = $this->level->getBlock($this->down())->getFrictionFactor() * 0.91;
+				}
+
+				$f = 0.16277136 / ($f4 * $f4 * $f4);
+
+				if($this->onGround){
+					$f5 = $this->getAIMoveSpeed() * $f;
+				}else{
+					$f5 = $this->jumpMovementFactor;
+				}
+
+				$this->moveFlying($strafe, $forward, $f5);
+			}else{
+				$d1 = $this->y;
+				$this->moveFlying($strafe, $forward, 0.02);
+				$this->move($this->motion->x, $this->motion->y, $this->motion->z);
+				$this->motion->x *= 0.5;
+				$this->motion->y *= 0.5;
+				$this->motion->z *= 0.5;
+				$this->motion->y -= 0.02;
+
+				if($this->isCollidedHorizontally and $this->level->getBlock($this->add($this->motion->x, $this->motion->y + 0.6000000238418579 - $this->y + $d1, $this->motion->z)) instanceof Liquid){
+					$this->motion->y = 0.30000001192092896;
+				}
+			}
+		}else{
+			$d0 = $this->y;
+			$f1 = 0.8;
+			$f2 = 0.02;
+			$f3 = 0; // TODO: check enchantment
+
+			if($f3 > 3.0){
+				$f3 = 3.0;
+			}
+
+			if(!$this->onGround){
+				$f3 *= 0.5;
+			}
+
+			if($f3 > 0.0){
+				$f1 += (0.54600006 - $f1) * $f3 / 3.0;
+				$f2 += ($this->getAIMoveSpeed() * 1.0 - $f2) * $f3 / 3.0;
+			}
+
+			$this->moveFlying($strafe, $forward, $f2);
+			$this->move($this->motion->x, $this->motion->y, $this->motion->z);
+			$this->motion->x *= $f1;
+			$this->motion->y *= 0.800000011920929;
+			$this->motion->z *= $f1;
+			$this->motion->y -= 0.02;
+
+			if($this->isCollidedHorizontally and $this->level->getBlock($this->add($this->motion->x, $this->motion->y + 0.6000000238418579 - $this->y + $d0, $this->motion->z)) instanceof Liquid){
+				$this->motion->y = 0.30000001192092896;
+			}
+		}
 	}
 }

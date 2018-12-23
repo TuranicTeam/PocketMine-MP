@@ -64,7 +64,7 @@ class LookAtPlayerBehavior extends Behavior{
 
 	public function onTick() : void{
 		if($this->player instanceof Player){
-			$this->mob->lookAt($this->player);
+			$this->mob->lookAt($this->player, true);
 		}
 	}
 
