@@ -54,19 +54,19 @@ class EntityMoveHelper{
 
 		if($this->needsUpdate){
 			$this->needsUpdate = false;
-			$i = $this->entity->getFloorY();
+			$i = floor($this->entity->y + 0.5);
 			$d0 = $this->targetX - $this->entity->x;
 			$d1 = $this->targetZ - $this->entity->z;
 			$d2 = $this->targetY - $i;
 			$d3 = $d0 * $d0 + $d2 * $d2 + $d1 * $d1;
 
 			if($d3 >= 0){
-				$f = atan2($d1, $d0) * 180.0 / pi() - 90.0;
-				$this->entity->yaw = $this->limitAngle($this->entity->yaw, $f, 30.0);
+				$f = atan2($d1, $d0) * 180 / pi() - 90;
+				$this->entity->yaw = $this->limitAngle($this->entity->yaw, $f, 30);
 				$this->entity->setAIMoveSpeed($sf = $this->speedMultiplier * $this->entity->getMovementSpeed());
 				$this->entity->setMoveForward($sf);
 
-				if($d2 > 0.0 && $d0 * $d0 + $d1 * $d1 < 1.0){
+				if($d2 > 0 && $d0 * $d0 + $d1 * $d1 < 1.0){
 					$this->entity->getJumpHelper()->setJumping(true);
 				}
 			}

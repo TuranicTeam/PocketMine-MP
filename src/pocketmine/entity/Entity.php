@@ -1545,7 +1545,7 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 		}
 
 		if($this->onGround){
-			$friction *= $this->level->getBlockAt((int) floor($this->x), (int) floor($this->y - 1), (int) floor($this->z))->getFrictionFactor();
+			$friction *= $this->level->getBlockAt((int) floor($this->x), (int) floor($this->y - 1), (int) floor($this->z))->getFrictionFactor() * 0.91;
 		}
 
 		$this->motion->x *= $friction;
@@ -1792,13 +1792,6 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 		}
 	}
 
-	public function handleWaterMovement() : void{
-		if($this->isUnderwater()){
-			$this->motion->x *= 0.2;
-			$this->motion->z *= 0.2;
-		}
-	}
-
 	public function mountEntity(Entity $entity, int $seatNumber = 0) : bool{
 		if($this->ridingEntity == null and $entity !== $this and count($entity->passengers) < $entity->getSeatCount()){
 			if(!isset($entity->passengers[$seatNumber])){
@@ -1967,8 +1960,8 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 			if($f < 1) $f = 1;
 
 			$f = $friction / $f;
-			//$strafe *= $f;
-			//$forward *= $f;
+			$strafe *= $f;
+			$forward *= $f;
 
 			$f1 = sin($this->yaw * pi() / 180);
 			$f2 = cos($this->yaw * pi() / 180);

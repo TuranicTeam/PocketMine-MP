@@ -565,7 +565,6 @@ class EntityNavigator{
 		$this->stuckTick = 0;
 		if($all){
 			$this->movePoint = null;
-			$this->mob->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED)->resetToDefault();
 		}
 	}
 

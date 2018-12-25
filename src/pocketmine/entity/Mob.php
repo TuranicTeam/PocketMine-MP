@@ -243,11 +243,19 @@ abstract class Mob extends Living{
 		$this->navigator->onNavigateUpdate();
 		Timings::$mobNavigationUpdateTimer->stopTiming();
 
+		$this->moveHelper->onUpdate();
+		$this->clearSightCache();
+		if($this->getLookPosition() !== null){
+			$this->lookAt($this->getLookPosition(), true);
+			$this->lookPosition = null;
+		}
+		$this->jumpHelper->doJump();
+
 		if($this->isJumping){
 			if($this->isInsideOfWater()){
-				$this->handleWaterMovement();
+				$this->handleWaterJump();
 			}elseif($this->isInsideOfLava()){
-				$this->handleWaterMovement(); // same
+				$this->handleLavaJump();
 			}elseif($this->onGround and $this->jumpTicks === 0){
 				$this->jump();
 				$this->jumpTicks = 10;
@@ -259,14 +267,6 @@ abstract class Mob extends Living{
 		$this->moveStrafing *= 0.98;
 		$this->moveForward *= 0.98;
 		$this->moveWithHeading($this->moveStrafing, $this->moveForward);
-
-		$this->moveHelper->onUpdate();
-		$this->clearSightCache();
-		if($this->getLookPosition() !== null){
-			$this->lookAt($this->getLookPosition(), true);
-			$this->lookPosition = null;
-		}
-		$this->jumpHelper->doJump();
 	}
 
 	/**
@@ -396,6 +396,14 @@ abstract class Mob extends Living{
 		return false;
 	}
 
+	public function handleWaterJump() : void{
+		$this->motion->y += 0.3;
+	}
+
+	public function handleLavaJump() : void{
+		$this->motion->y += 0.3;
+	}
+
 	/**
 	 * @return EntityNavigator
 	 */
@@ -488,19 +496,13 @@ abstract class Mob extends Living{
 			}else{
 				$d1 = $this->y;
 				$this->moveFlying($strafe, $forward, 0.02);
-				$this->move($this->motion->x, $this->motion->y, $this->motion->z);
-				$this->motion->x *= 0.5;
-				$this->motion->y *= 0.5;
-				$this->motion->z *= 0.5;
-				$this->motion->y -= 0.02;
 
-				if($this->isCollidedHorizontally and $this->level->getBlock($this->add($this->motion->x, $this->motion->y + 0.6000000238418579 - $this->y + $d1, $this->motion->z)) instanceof Liquid){
+				if($this->isCollidedHorizontally and $this->level->getBlock($this->add(0, 0.4000000238418579 - $this->y + $d1, 0)) instanceof Liquid){
 					$this->motion->y = 0.30000001192092896;
 				}
 			}
 		}else{
 			$d0 = $this->y;
-			$f1 = 0.8;
 			$f2 = 0.02;
 			$f3 = 0; // TODO: check enchantment
 
@@ -513,20 +515,13 @@ abstract class Mob extends Living{
 			}
 
 			if($f3 > 0.0){
-				$f1 += (0.54600006 - $f1) * $f3 / 3.0;
 				$f2 += ($this->getAIMoveSpeed() * 1.0 - $f2) * $f3 / 3.0;
 			}
 
 			$this->moveFlying($strafe, $forward, $f2);
-			$this->move($this->motion->x, $this->motion->y, $this->motion->z);
-			$this->motion->x *= $f1;
-			$this->motion->y *= 0.800000011920929;
-			$this->motion->z *= $f1;
-			$this->motion->y -= 0.02;
-
-			if($this->isCollidedHorizontally and $this->level->getBlock($this->add($this->motion->x, $this->motion->y + 0.6000000238418579 - $this->y + $d0, $this->motion->z)) instanceof Liquid){
+			/*if($this->isCollidedHorizontally and $this->level->getBlock($this->add(0, 0.4000000238418579 - $this->y + $d0, 0)) instanceof Liquid){
 				$this->motion->y = 0.30000001192092896;
-			}
+			}*/
 		}
 	}
 }
