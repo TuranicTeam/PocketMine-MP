@@ -287,7 +287,7 @@ class EntityNavigator{
 
 			$coord = new Vector3((int) $item->x, $block->y, (int) $item->y);
 			$tb = $this->mob->level->getBlock($coord);
-			if($tb->isSolid()){
+			if(!$tb->isPassable()){
 				if(!$this->canJumpAt($block)){
 					continue; // can't jump because top block is solid
 				}
@@ -308,9 +308,9 @@ class EntityNavigator{
 					if(!$canMove or $this->isObstructed($blockUp)) continue;
 
 					$cache[$item->getHashCode()] = $blockUp;
-				}elseif($tb->isPassable($this->mob)){
+				}else{
 					$blockUp = $this->mob->level->getBlock($coord->getSide(Facing::UP));
-					if($blockUp->isSolid()){
+					if(!$blockUp->isPassable()){
 						// Can't jump
 						continue;
 					}
@@ -318,8 +318,6 @@ class EntityNavigator{
 					if($this->isObstructed($blockUp)) continue;
 
 					$cache[$item->getHashCode()] = $blockUp;
-				}else{
-					continue; // cannot jump
 				}
 			}else{
 				$blockDown = $this->mob->level->getBlock($coord->add(0, -1, 0));
@@ -429,7 +427,7 @@ class EntityNavigator{
 	 */
 	public function isBlocked(Vector3 $coord) : bool{
 		$block = $this->mob->level->getBlock($coord);
-		return !$block->isPassable($this->mob);
+		return !$block->isPassable();
 	}
 
 	/**

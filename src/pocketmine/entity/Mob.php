@@ -258,10 +258,9 @@ abstract class Mob extends Living{
 				$this->handleLavaJump();
 			}elseif($this->onGround and $this->jumpTicks === 0){
 				$this->jump();
+				$this->motion->y += $this->gravity;
 				$this->jumpTicks = 10;
 			}
-		}else{
-			$this->jumpTicks = 0;
 		}
 
 		$this->moveStrafing *= 0.98;
@@ -330,78 +329,12 @@ abstract class Mob extends Living{
 		return $this->targetBehaviorPool;
 	}
 
-	public function moveForward(float $spm) : bool{
-		return $this->moveTo($this->getDirectionVector(), $spm);
-	}
-
-	public function moveBack(float $spm) : bool{
-		return $this->moveTo($this->getDirectionVector()->multiply(-1), $spm);
-	}
-
-	/**
-	 * @param Vector3 $dir
-	 * @param float   $spm
-	 *
-	 * @return bool
-	 */
-	public function moveTo(Vector3 $dir, float $spm) : bool{
-		if($this->jumpCooldown > 0) $this->jumpCooldown--;
-
-		$sf = $this->getMovementSpeed() * $spm * 0.7 * $this->getAiMoveSpeed();
-		$dir->y = 0;
-
-		$coord = $this->add($dir->multiply($sf)->add($dir->multiply($this->width * 0.5)));
-
-		$block = $this->level->getBlock($coord);
-
-		if($this->isInsideOfSolid()){
-			$block = $this->level->getBlock($this);
-		}
-
-		$blockUp = $block->getSide(Facing::UP);
-		$blockUpUp = $block->getSide(Facing::UP, 2);
-
-		$bb = $block->getBoundingBox();
-
-		$collide = $block->isSolid() or ($this->height >= 1 and $blockUp->isSolid());
-
-		if($collide){
-			//if($bb !== null and $bb->maxY <= $this->y){
-			$collide = false;
-			$this->stepHeight = 1.0;
-			//}
-		}
-
-		if(!$collide){
-			if(!$this->onGround and $this->jumpCooldown === 0 and !$this->isSwimmer()) return true;
-
-			$velocity = $dir->multiply($sf);
-			$entityVelocity = $this->getMotion();
-			$entityVelocity->y = 0;
-
-			$this->motion = $this->getMotion()->add($velocity->subtract($entityVelocity));
-			return true;
-		}else{
-			if($this->canClimb()){
-				$this->motion->y = 0.2;
-				$this->jumpCooldown = 20;
-				return true;
-			}elseif((!$blockUp->isSolid() and !($this->height > 1 and $blockUpUp->isSolid()) or $block->isPassable($this)) or $this->isSwimmer()){
-				$this->jumpCooldown = 20;
-				return true;
-			}else{
-				$this->motion->x = $this->motion->z = 0;
-			}
-		}
-		return false;
-	}
-
 	public function handleWaterJump() : void{
-		$this->motion->y += 0.3;
+		$this->motion->y += 0.39;
 	}
 
 	public function handleLavaJump() : void{
-		$this->motion->y += 0.3;
+		$this->motion->y += 0.39;
 	}
 
 	/**
