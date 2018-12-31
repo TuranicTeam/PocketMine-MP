@@ -92,7 +92,6 @@ use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
-use pocketmine\network\mcpe\protocol\AddPlayerPacket;
 use pocketmine\network\mcpe\protocol\AnimatePacket;
 use pocketmine\network\mcpe\protocol\EntityEventPacket;
 use pocketmine\network\mcpe\protocol\MoveEntityAbsolutePacket;
@@ -112,7 +111,7 @@ use pocketmine\utils\UUID;
 
 abstract class Entity extends Location implements Metadatable, EntityIds{
 
-	public const MOTION_THRESHOLD = 0.00001;
+	public const MOTION_THRESHOLD = 0.005;
 
 	public const NETWORK_ID = -1;
 
@@ -1538,7 +1537,7 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 			$this->motion->y *= $friction;
 		}
 
-		if(!$this->onGround){
+		if(!$this->onGround or $this->forceMovementUpdate){
 			$this->applyGravity();
 		}
 
