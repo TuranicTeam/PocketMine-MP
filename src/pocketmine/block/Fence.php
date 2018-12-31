@@ -112,4 +112,8 @@ abstract class Fence extends Transparent{
 
 		return $bbs;
 	}
+
+	public function isPassable() : bool{
+		return false;
+	}
 }

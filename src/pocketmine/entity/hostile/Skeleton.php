@@ -60,13 +60,7 @@ class Skeleton extends Monster implements RangedAttackerMob{
 		parent::initEntity($nbt);
 
 		$this->equipment = new AltayEntityEquipment($this);
-		$loot = $this->level->random->nextBoundedInt(100);
-		$bow = ItemFactory::get(Item::BOW);
-		if($loot <= 89){
-			$this->equipment->setItemInHand($bow);
-		}else{
-			$this->equipment->setOffhandItem($bow);
-		}
+		$this->equipment->setItemInHand(ItemFactory::get(Item::BOW));
 
 		// TODO: Armors
 	}

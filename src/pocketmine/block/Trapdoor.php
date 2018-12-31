@@ -100,4 +100,8 @@ class Trapdoor extends Transparent{
 	public function getFuelTime() : int{
 		return 300;
 	}
+
+	public function isPassable() : bool{
+		return $this->open;
+	}
 }

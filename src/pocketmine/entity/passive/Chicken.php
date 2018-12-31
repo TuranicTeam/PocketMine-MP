@@ -119,7 +119,6 @@ class Chicken extends Animal{
 
 		if(!$this->isImmobile() and !$this->isBaby() and !$this->isChickenJockey() and $this->timeUntilNextEgg-- <= 0){
 			$this->level->dropItem($this, ItemFactory::get(Item::EGG));
-			$this->level->broadcastLevelSoundEvent($this, LevelSoundEventPacket::SOUND_LAY_EGG);
 			$this->timeUntilNextEgg = $this->level->random->nextBoundedInt(6000) + 6000;
 		}
 		return parent::entityBaseTick($diff);

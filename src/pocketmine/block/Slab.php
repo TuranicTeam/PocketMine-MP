@@ -103,4 +103,8 @@ abstract class Slab extends Transparent{
 	protected function recalculateBoundingBox() : ?AxisAlignedBB{
 		return AxisAlignedBB::one()->trim($this->top ? Facing::DOWN : Facing::UP, 0.5);
 	}
+
+	public function isPassable() : bool{
+		return !$this->top;
+	}
 }

@@ -65,7 +65,7 @@ class Sheep extends Animal{
 
 	protected function initEntity(CompoundTag $nbt) : void{
 		$this->setMaxHealth(8);
-		$this->setMovementSpeed(0.23000000417232513);
+		$this->setMovementSpeed(0.25);
 		$this->setFollowRange(10);
 		$this->propertyManager->setByte(self::DATA_COLOR, $nbt->getByte("Color", $this->getRandomColor($this->level->random)));
 		$this->setSheared(boolval($nbt->getByte("Sheared", 0)));

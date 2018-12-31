@@ -66,7 +66,7 @@ class EntityMoveHelper{
 				$this->entity->setAIMoveSpeed($sf = $this->speedMultiplier * $this->entity->getMovementSpeed());
 				$this->entity->setMoveForward($sf);
 
-				if($d2 > 0 and ($d0 * $d0 + $d1 * $d1) <= 1.0){
+				if($d2 > 0 and ($d0 * $d0 + $d1 * $d1) < 1.0){
 					$this->entity->getJumpHelper()->setJumping(true);
 				}
 			}

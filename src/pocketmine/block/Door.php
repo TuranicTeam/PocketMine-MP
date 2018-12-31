@@ -166,4 +166,8 @@ abstract class Door extends Transparent{
 		}
 		return parent::getAffectedBlocks();
 	}
+
+	public function isPassable() : bool{
+		return $this->open;
+	}
 }

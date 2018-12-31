@@ -355,7 +355,7 @@ class EntityNavigator{
 				}else{
 					if($this->isObstructed($coord) or (!$this->mob->isSwimmer() and $this->avoidsWater and $this->mob->level->getBlock($coord->getSide(Facing::DOWN)) instanceof Liquid)) continue;
 
-					$cache[$item->getHashCode()] = $this->mob->level->getBlock($coord);
+					$cache[$item->getHashCode()] = $block;
 				}
 			}
 			$item->height = $cache[$item->getHashCode()]->y;
@@ -648,7 +648,8 @@ class EntityNavigator{
 		}
 
 		if($this->movePoint !== null){
-			$this->mob->getMoveHelper()->moveTo($this->movePoint->x + 0.5, $this->movePoint->height, $this->movePoint->y + 0.5, $this->speedMultiplier);
+			$f = floor($this->mob->width + 1) * 0.5;
+			$this->mob->getMoveHelper()->moveTo($this->movePoint->x + $f, $this->movePoint->height, $this->movePoint->y + $f, $this->speedMultiplier);
 
 			$currentPos = $this->mob->floor();
 

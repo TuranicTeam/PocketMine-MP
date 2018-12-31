@@ -100,4 +100,8 @@ class Lava extends Liquid{
 
 		$entity->resetFallDistance();
 	}
+
+	public function isPassable() : bool{
+		return false;
+	}
 }

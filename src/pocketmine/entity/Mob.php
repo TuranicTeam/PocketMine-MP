@@ -258,9 +258,10 @@ abstract class Mob extends Living{
 				$this->handleLavaJump();
 			}elseif($this->onGround and $this->jumpTicks === 0){
 				$this->jump();
-				$this->motion->y += $this->gravity;
 				$this->jumpTicks = 10;
 			}
+		}else{
+			$this->jumpTicks = 0;
 		}
 
 		$this->moveStrafing *= 0.98;
@@ -431,7 +432,7 @@ abstract class Mob extends Living{
 				$this->moveFlying($strafe, $forward, 0.02);
 
 				if($this->isCollidedHorizontally and $this->level->getBlock($this->add(0, 0.4000000238418579 - $this->y + $d1, 0)) instanceof Liquid){
-					$this->motion->y = 0.30000001192092896;
+					$this->motion->y += 0.3;
 				}
 			}
 		}else{
@@ -452,9 +453,9 @@ abstract class Mob extends Living{
 			}
 
 			$this->moveFlying($strafe, $forward, $f2);
-			/*if($this->isCollidedHorizontally and $this->level->getBlock($this->add(0, 0.4000000238418579 - $this->y + $d0, 0)) instanceof Liquid){
-				$this->motion->y = 0.30000001192092896;
-			}*/
+			if($this->isCollidedHorizontally and $this->level->getBlock($this->add(0, 0.4, 0)) instanceof Liquid){
+				$this->motion->y = 0.3;
+			}
 		}
 	}
 }

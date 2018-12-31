@@ -1532,13 +1532,15 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 	}
 
 	protected function tryChangeMovement() : void{
-		$friction = 1 - $this->drag;
+		$friction = 0.91;
 
 		if($this->applyDragBeforeGravity()){
 			$this->motion->y *= $friction;
 		}
 
-		$this->applyGravity();
+		if(!$this->onGround){
+			$this->applyGravity();
+		}
 
 		if(!$this->applyDragBeforeGravity()){
 			$this->motion->y *= $friction;
@@ -1698,7 +1700,15 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 		$this->timings->startTiming();
 
 		if($this->hasMovementUpdate()){
-			$this->tryChangeMovement();
+			$f = 1 - $this->drag;
+
+			$this->motion->x *= $f;
+			$this->motion->y *= $f;
+			$this->motion->z *= $f;
+
+			if($this->motion->x != 0 or $this->motion->y != 0 or $this->motion->z != 0){
+				$this->move($this->motion->x, $this->motion->y, $this->motion->z);
+			}
 
 			if(abs($this->motion->x) <= self::MOTION_THRESHOLD){
 				$this->motion->x = 0;
@@ -1710,10 +1720,7 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 				$this->motion->z = 0;
 			}
 
-			if($this->motion->x != 0 or $this->motion->y != 0 or $this->motion->z != 0){
-				$this->move($this->motion->x, $this->motion->y, $this->motion->z);
-			}
-
+			$this->tryChangeMovement();
 			$this->forceMovementUpdate = false;
 		}
 
@@ -2006,13 +2013,13 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 	}
 
 	public function isInsideOfLava() : bool{
-		$block = $this->level->getBlockAt((int) floor($this->x), (int) floor($y = ($this->y + $this->getEyeHeight())), (int) floor($this->z));
+		$block = $this->level->getBlockAt((int) floor($this->x), (int) floor($this->y + $this->getEyeHeight()), (int) floor($this->z));
 
 		return $block instanceof Lava;
 	}
 
 	public function isInsideOfWater() : bool{
-		$block = $this->level->getBlockAt((int) floor($this->x), (int) floor($y = ($this->y + $this->getEyeHeight())), (int) floor($this->z));
+		$block = $this->level->getBlockAt((int) floor($this->x), (int) floor($this->y + $this->getEyeHeight()), (int) floor($this->z));
 
 		return $block instanceof Water;
 	}
