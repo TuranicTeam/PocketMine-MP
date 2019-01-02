@@ -556,11 +556,11 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 	protected $blocksAround = [];
 
 	/** @var Location */
-	protected $lastLocation;
+	public $lastLocation;
 	/** @var Vector3 */
 	protected $motion;
 	/** @var Vector3 */
-	protected $lastMotion;
+	public $lastMotion;
 	/** @var bool */
 	protected $forceMovementUpdate = false;
 

@@ -74,7 +74,7 @@ class EntityMoveHelper{
 	}
 
 	protected function limitAngle(float $a, float $b, float $c){
-		$f = $this->wrapAngleTo180($b - $a);
+		$f = $this->entity->wrapAngleTo180($b - $a);
 
 		if($f > $c){
 			$f = $c;
@@ -93,18 +93,6 @@ class EntityMoveHelper{
 		}
 
 		return $f1;
-	}
-
-	private function wrapAngleTo180(float $angle) : float{
-		$angle %= 360;
-		if($angle > 180){
-			$angle -= 360;
-		}
-		if($angle < -180){
-			$angle += 360;
-		}
-
-		return $angle;
 	}
 
 	/**

@@ -28,7 +28,6 @@ use pocketmine\block\Block;
 use pocketmine\block\Lava;
 use pocketmine\block\Liquid;
 use pocketmine\block\Water;
-use pocketmine\entity\Attribute;
 use pocketmine\entity\Mob;
 use pocketmine\math\Facing;
 use pocketmine\math\Vector2;
@@ -85,10 +84,10 @@ class EntityNavigator{
 	protected $avoidsWater = false, $avoidsSun = false;
 	/** @var float */
 	protected $speedMultiplier = 1.0;
-
-	protected $lastPoint = null;
+	/** @var Vector3|null */
+	protected $lastPoint;
 	protected $stuckTick = 0;
-	/** @var Vector3 */
+	/** @var Vector3|null */
 	protected $movePoint;
 	/** @var int */
 	protected $processorType = self::PROCESSOR_TYPE_WALK;
@@ -190,9 +189,11 @@ class EntityNavigator{
 
 				if($this->mob->isSwimmer()){
 					$currentBlock = $this->mob->level->getBlock($this->mob);
-					while($currentBlock instanceof Water){
+					$attempts = 0;
+					while($currentBlock instanceof Water and $attempts < 10){
 						$currentBlock = $currentBlock->getSide(Facing::UP);
 						$y++;
+						$attempts++;
 					}
 				}
 
@@ -320,7 +321,7 @@ class EntityNavigator{
 					$cache[$item->getHashCode()] = $blockUp;
 				}
 			}else{
-				$blockDown = $this->mob->level->getBlock($coord->add(0, -1, 0));
+				$blockDown = $this->mob->level->getBlock($coord->getSide(Facing::DOWN));
 				if(!$blockDown->isSolid() and !$this->mob->isSwimmer() and !($blockDown instanceof Liquid) and !$this->mob->canFly()){ // TODO: bug?
 					if($this->mob->canClimb()){
 						$canClimb = false;
@@ -353,7 +354,7 @@ class EntityNavigator{
 						$cache[$item->getHashCode()] = $blockDown;
 					}
 				}else{
-					if($this->isObstructed($coord) or (!$this->mob->isSwimmer() and $this->avoidsWater and $this->mob->level->getBlock($coord->getSide(Facing::DOWN)) instanceof Liquid)) continue;
+					if($this->isObstructed($coord) or (!$this->mob->isSwimmer() and $this->avoidsWater and $blockDown instanceof Liquid)) continue;
 
 					$cache[$item->getHashCode()] = $block;
 				}
@@ -648,7 +649,7 @@ class EntityNavigator{
 		}
 
 		if($this->movePoint !== null){
-			$f = floor($this->mob->width + 1) * 0.5;
+			$f = floor($this->mob->width + 1) / 2;
 			$this->mob->getMoveHelper()->moveTo($this->movePoint->x + $f, $this->movePoint->height, $this->movePoint->y + $f, $this->speedMultiplier);
 
 			$currentPos = $this->mob->floor();
@@ -657,7 +658,7 @@ class EntityNavigator{
 				$this->movePoint = null;
 			}
 
-			if($this->lastPoint !== null and $currentPos->equals($this->lastPoint)){
+			if($this->lastPoint !== null and $currentPos->x == $this->lastPoint->x and $currentPos->z == $this->lastPoint->z){
 				$this->stuckTick++;
 
 				if($this->stuckTick > 100){

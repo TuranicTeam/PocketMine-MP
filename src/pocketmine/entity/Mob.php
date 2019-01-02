@@ -27,7 +27,9 @@ namespace pocketmine\entity;
 
 use pocketmine\block\Liquid;
 use pocketmine\entity\behavior\BehaviorPool;
+use pocketmine\entity\helper\EntityBodyHelper;
 use pocketmine\entity\helper\EntityJumpHelper;
+use pocketmine\entity\helper\EntityLookHelper;
 use pocketmine\entity\helper\EntityMoveHelper;
 use pocketmine\entity\pathfinder\EntityNavigator;
 use pocketmine\math\Facing;
@@ -44,8 +46,6 @@ abstract class Mob extends Living{
 	protected $targetBehaviorPool;
 	/** @var EntityNavigator */
 	protected $navigator;
-	/** @var Vector3 */
-	protected $lookPosition;
 	/** @var Entity[] */
 	protected $seenEntities = [];
 	/** @var Entity[] */
@@ -69,6 +69,13 @@ abstract class Mob extends Living{
 	protected $moveHelper;
 	/** @var EntityJumpHelper */
 	protected $jumpHelper;
+	/** @var EntityBodyHelper */
+	protected $bodyHelper;
+	/** @var EntityLookHelper */
+	protected $lookHelper;
+
+	public $yawOffset = 0.0;
+	public $headYaw = 0.0;
 
 	/**
 	 * @return Vector3
@@ -158,6 +165,20 @@ abstract class Mob extends Living{
 	}
 
 	/**
+	 * @return EntityBodyHelper
+	 */
+	public function getBodyHelper() : EntityBodyHelper{
+		return $this->bodyHelper;
+	}
+
+	/**
+	 * @return EntityLookHelper
+	 */
+	public function getLookHelper() : EntityLookHelper{
+		return $this->lookHelper;
+	}
+
+	/**
 	 * @param CompoundTag $nbt
 	 */
 	protected function initEntity(CompoundTag $nbt) : void{
@@ -168,6 +189,8 @@ abstract class Mob extends Living{
 		$this->navigator = new EntityNavigator($this);
 		$this->moveHelper = new EntityMoveHelper($this);
 		$this->jumpHelper = new EntityJumpHelper($this);
+		$this->lookHelper = new EntityLookHelper($this);
+		$this->bodyHelper = new EntityBodyHelper($this);
 
 		$this->addBehaviors();
 		$this->setImmobile(boolval($nbt->getByte("NoAI", 1)));
@@ -244,12 +267,10 @@ abstract class Mob extends Living{
 		Timings::$mobNavigationUpdateTimer->stopTiming();
 
 		$this->moveHelper->onUpdate();
-		$this->clearSightCache();
-		if($this->getLookPosition() !== null){
-			$this->lookAt($this->getLookPosition(), true);
-			$this->lookPosition = null;
-		}
+		$this->lookHelper->onUpdate();
 		$this->jumpHelper->doJump();
+
+		$this->clearSightCache();
 
 		if($this->isJumping){
 			if($this->isInsideOfWater()){
@@ -267,6 +288,8 @@ abstract class Mob extends Living{
 		$this->moveStrafing *= 0.98;
 		$this->moveForward *= 0.98;
 		$this->moveWithHeading($this->moveStrafing, $this->moveForward);
+
+		$this->bodyHelper->onUpdate();
 	}
 
 	/**
@@ -296,20 +319,6 @@ abstract class Mob extends Living{
 	public function clearSightCache() : void{
 		$this->seenEntities = [];
 		$this->unseenEntities = [];
-	}
-
-	/**
-	 * @return null|Vector3
-	 */
-	public function getLookPosition() : ?Vector3{
-		return $this->lookPosition;
-	}
-
-	/**
-	 * @param null|Vector3 $pos
-	 */
-	public function setLookPosition(?Vector3 $pos) : void{
-		$this->lookPosition = $pos;
 	}
 
 	protected function addBehaviors() : void{
@@ -343,6 +352,10 @@ abstract class Mob extends Living{
 	 */
 	public function getNavigator() : EntityNavigator{
 		return $this->navigator;
+	}
+
+	public function getVerticalFaceSpeed() : int{
+		return 40;
 	}
 
 	/**
@@ -415,7 +428,7 @@ abstract class Mob extends Living{
 				$f4 = 0.91;
 
 				if($this->onGround){
-					$f4 = $this->level->getBlock($this->down())->getFrictionFactor() * 0.91;
+					$f4 *= $this->level->getBlock($this->down())->getFrictionFactor();
 				}
 
 				$f = 0.16277136 / ($f4 * $f4 * $f4);
@@ -428,15 +441,13 @@ abstract class Mob extends Living{
 
 				$this->moveFlying($strafe, $forward, $f5);
 			}else{
-				$d1 = $this->y;
 				$this->moveFlying($strafe, $forward, 0.02);
 
-				if($this->isCollidedHorizontally and $this->level->getBlock($this->add(0, 0.4000000238418579 - $this->y + $d1, 0)) instanceof Liquid){
+				if($this->isCollidedHorizontally and $this->level->getBlock($this) instanceof Liquid){
 					$this->motion->y = 0.3;
 				}
 			}
 		}else{
-			$d0 = $this->y;
 			$f2 = 0.02;
 			$f3 = 0; // TODO: check enchantment
 
@@ -453,9 +464,40 @@ abstract class Mob extends Living{
 			}
 
 			$this->moveFlying($strafe, $forward, $f2);
-			if($this->isCollidedHorizontally and $this->level->getBlock($this->add(0, 0.4, 0)) instanceof Liquid){
+			if($this->isCollidedHorizontally and $this->level->getBlock($this) instanceof Liquid){
 				$this->motion->y = 0.3;
 			}
 		}
+	}
+
+	protected function tryChangeMovement() : void{
+		if($this->isInsideOfWater()){
+			$this->motion->x *= 0.8;
+			$this->motion->y *= 0.8;
+			$this->motion->z *= 0.8;
+
+			$this->motion->y -= 0.02;
+		}elseif($this->isInsideOfLava()){
+			$this->motion->x *= 0.5;
+			$this->motion->y *= 0.5;
+			$this->motion->z *= 0.5;
+
+			$this->motion->y -= 0.02;
+		}else{
+			parent::tryChangeMovement();
+		}
+	}
+
+	// TODO: move this to MathHelper class
+	public function wrapAngleTo180(float $angle) : float{
+		$angle %= 360;
+		if($angle > 180){
+			$angle -= 360;
+		}
+		if($angle < -180){
+			$angle += 360;
+		}
+
+		return $angle;
 	}
 }
