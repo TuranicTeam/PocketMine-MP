@@ -58,6 +58,7 @@ class Ladder extends Transparent{
 	}
 
 	public function onEntityCollide(Entity $entity) : void{
+        parent::onEntityCollide($entity);
 		if($entity->asVector3()->floor()->distanceSquared($this) < 1){ //entity coordinates must be inside block
 			$entity->resetFallDistance();
 			$entity->onGround = true;

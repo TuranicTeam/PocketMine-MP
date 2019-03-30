@@ -69,6 +69,7 @@ class TNT extends Solid{
 	}
 
 	public function onEntityCollide(Entity $entity) : void{
+	    parent::onEntityCollide($entity);
 		if($entity instanceof Arrow and $entity->isOnFire()){
 			$this->ignite();
 		}

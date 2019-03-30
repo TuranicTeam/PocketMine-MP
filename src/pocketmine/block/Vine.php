@@ -68,6 +68,7 @@ class Vine extends Flowable{
 	}
 
 	public function onEntityCollide(Entity $entity) : void{
+        parent::onEntityCollide($entity);
 		$entity->resetFallDistance();
 	}
 

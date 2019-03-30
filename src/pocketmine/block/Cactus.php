@@ -65,6 +65,7 @@ class Cactus extends Transparent{
 	}
 
 	public function onEntityCollide(Entity $entity) : void{
+        parent::onEntityCollide($entity);
 		$ev = new EntityDamageByBlockEvent($this, $entity, EntityDamageEvent::CAUSE_CONTACT, 1);
 		$entity->attack($ev);
 	}
