@@ -114,7 +114,7 @@ abstract class Armor extends Durable{
 	public function onActivate(Player $player, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector): bool{
         $existing = $player->getArmorInventory()->getItem($this->getArmorSlot());
         if(!$existing->isNull()){
-            $player->getInventory()->setItem($player->getInventory()->getHeldItemIndex(), $existing);
+            return false;
         }
         if(!$player->isCreative(true)){
             $player->getInventory()->setItem($player->getInventory()->getHeldItemIndex(), Item::get(Item::AIR));

@@ -1370,6 +1370,11 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 		return 300;
 	}
 
+	public function resetPortal() {
+	    $this->portalCounter = 0;
+	    $this->inPortal = false;
+    }
+
 	public function travelToDimension(int $dimensionId) : void{
 		if($dimensionId === DimensionIds::NETHER){
 			$targetLevel = $this->server->getNetherLevel();

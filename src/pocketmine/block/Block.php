@@ -673,7 +673,7 @@ class Block extends Position implements BlockIds, Metadatable{
 	 * @param Entity $entity
 	 */
 	public function onEntityCollide(Entity $entity) : void{
-
+        $entity->resetPortal();
 	}
 
 	/**
