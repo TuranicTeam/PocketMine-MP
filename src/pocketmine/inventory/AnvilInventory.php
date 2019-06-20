@@ -184,7 +184,4 @@ class AnvilInventory extends ContainerInventory implements FakeInventory{
 		}
 		$this->clearAll();
 	}
-	public function onSlotChange(int $index, Item $before, bool $send) : void{
-		parent::onSlotChange($index, $before,  $send);
-	}
 }
