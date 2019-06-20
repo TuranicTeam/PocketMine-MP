@@ -38,12 +38,16 @@ use pocketmine\network\mcpe\protocol\types\WindowTypes;
 use pocketmine\Player;
 
 class AnvilInventory extends ContainerInventory implements FakeInventory{
+	/** @var int */
+	public const SLOT_INPUT = 0;
+	public const SLOT_MATERIAL = 1;
+	public const SLOT_RESULT = 2;
 
 	/** @var Position */
 	protected $holder;
 
 	public function __construct(Position $pos){
-		parent::__construct($pos->asPosition());
+		parent::__construct($pos);
 	}
 
 	public function getNetworkType() : int{
@@ -59,7 +63,7 @@ class AnvilInventory extends ContainerInventory implements FakeInventory{
 	}
 
 	public function isResultOutput() : bool{
-		return !$this->getItem(2)->isNull();
+		return !$this->getItem(self::SLOT_RESULT)->isNull();
 	}
 
 	/**
@@ -69,8 +73,8 @@ class AnvilInventory extends ContainerInventory implements FakeInventory{
 	 * @return bool
 	 */
 	public function onResult(Player $player, Item $result) : bool{
-		$input = $this->getItem(0);
-		$material = $this->getItem(1);
+		$input = $this->getItem(self::SLOT_INPUT);
+		$material = $this->getItem(self::SLOT_MATERIAL);
 		$resultE = clone $input;
 		$repairCost = $input->getRepairCost();
 
@@ -149,14 +153,14 @@ class AnvilInventory extends ContainerInventory implements FakeInventory{
 
 		$resultE->setRepairCost($repairCost);
 
-		if($result->equalsExact($resultE)){
-			$this->clear(0);
+		if($result->equals($resultE, false, false)){
+			$this->clear(self::SLOT_INPUT);
 
-			if(!$this->getItem(1)->isNull()){
-				$material = $this->getItem(1);
+			if(!$this->getItem(self::SLOT_MATERIAL)->isNull()){
+				$material = $this->getItem(self::SLOT_MATERIAL);
 				$material->pop();
 
-				$this->setItem(1, $material);
+				$this->setItem(self::SLOT_MATERIAL, $material);
 			}
 
 			return true;
@@ -179,5 +183,8 @@ class AnvilInventory extends ContainerInventory implements FakeInventory{
 			$who->dropItem($item);
 		}
 		$this->clearAll();
+	}
+	public function onSlotChange(int $index, Item $before, bool $send) : void{
+		parent::onSlotChange($index, $before,  $send);
 	}
 }

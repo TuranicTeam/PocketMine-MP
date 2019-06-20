@@ -225,6 +225,10 @@ class NetworkInventoryAction{
 						}
 					case self::SOURCE_TYPE_ENCHANT_MATERIAL:
 						if($window instanceof EnchantInventory){
+							if($window->isFinished){
+								$window->setItem(1, $this->newItem, false);
+								return null;
+							}
 							return new EnchantAction($window, 1, $this->oldItem, $this->newItem);
 						}else{
 							if($window === null){
@@ -235,7 +239,12 @@ class NetworkInventoryAction{
 						}
 					case self::SOURCE_TYPE_ENCHANT_OUTPUT:
 						if($window instanceof EnchantInventory){
-							return new EnchantAction($window, $this->inventorySlot, $this->oldItem, $this->newItem);
+							if(!$window->isFinished){
+								$window->isFinished = true;
+								$window->setItem(0, $this->oldItem, false);
+								return new EnchantAction($window, $this->inventorySlot, $this->newItem, $this->oldItem);
+							}
+							return null;
 						}else{
 							if($window === null){
 								throw new \InvalidStateException("Window not found");
@@ -248,7 +257,7 @@ class NetworkInventoryAction{
 							if($window->isResultOutput()){
 								return null;
 							}
-							return new SlotChangeAction($window, 0, $this->oldItem, $this->newItem);
+							return new SlotChangeAction($window, AnvilInventory::SLOT_INPUT, $this->oldItem, $this->newItem);
 						}else{
 							if($window === null){
 								throw new \InvalidStateException("Window not found");
@@ -261,7 +270,7 @@ class NetworkInventoryAction{
 							if($window->isResultOutput()){
 								return null;
 							}
-							return new SlotChangeAction($window, 1, $this->oldItem, $this->newItem);
+							return new SlotChangeAction($window, AnvilInventory::SLOT_MATERIAL, $this->oldItem, $this->newItem);
 						}else{
 							if($window === null){
 								throw new \InvalidStateException("Window not found");
@@ -272,8 +281,8 @@ class NetworkInventoryAction{
 					case self::SOURCE_TYPE_ANVIL_RESULT:
 						if($window instanceof AnvilInventory){
 							if($window->onResult($player, $this->oldItem)){
-								$window->setItem(2, $this->oldItem, false);
-								return new SlotChangeAction($window, 2, $this->oldItem, $this->newItem);
+								$window->setItem(AnvilInventory::SLOT_RESULT, $this->oldItem, false);
+								return new SlotChangeAction($window, AnvilInventory::SLOT_RESULT, $this->oldItem, $this->newItem);
 							}else{
 								return null;
 							}

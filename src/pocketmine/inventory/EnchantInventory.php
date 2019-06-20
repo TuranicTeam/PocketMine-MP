@@ -23,17 +23,19 @@ declare(strict_types=1);
 
 namespace pocketmine\inventory;
 
+use pocketmine\item\Item;
 use pocketmine\level\Position;
 use pocketmine\network\mcpe\protocol\types\WindowTypes;
 use pocketmine\Player;
 
 class EnchantInventory extends ContainerInventory implements FakeInventory{
-
 	/** @var Position */
 	protected $holder;
+	/** @var bool */
+	public $isFinished = false;
 
 	public function __construct(Position $pos){
-		parent::__construct($pos->asPosition());
+		parent::__construct($pos);
 	}
 
 	public function getNetworkType() : int{
