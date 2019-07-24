@@ -40,6 +40,7 @@ use pocketmine\entity\hostile\Skeleton;
 use pocketmine\entity\hostile\Spider;
 use pocketmine\entity\hostile\Stray;
 use pocketmine\entity\hostile\Zombie;
+use pocketmine\entity\hostile\ZombiePigman;
 use pocketmine\entity\object\ArmorStand;
 use pocketmine\entity\object\ExperienceOrb;
 use pocketmine\entity\object\FallingBlock;
@@ -385,6 +386,7 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 		Entity::registerEntity(Villager::class, false, ['Villager', 'minecraft:villager']);
 		Entity::registerEntity(Wolf::class, false, ['Wolf', 'minecraft:wolf']);
 		Entity::registerEntity(Zombie::class, false, ['Zombie', 'minecraft:zombie']);
+        Entity::registerEntity(ZombiePigman::class, false, ['ZombiePigman', 'minecraft:zombiepigman']);
 		Entity::registerEntity(Cow::class, false, ['Cow', 'minecraft:cow']);
 		Entity::registerEntity(Sheep::class, false, ['Sheep', 'minecraft:sheep']);
 		Entity::registerEntity(Mooshroom::class, false, ['Mooshroom', 'minecraft:mooshroom']);

@@ -257,6 +257,6 @@ abstract class Biome{
 	 * @return float
 	 */
 	public function getSpawningChance() : float{
-		return 0.1;
+		return 0.4;
 	}
 }

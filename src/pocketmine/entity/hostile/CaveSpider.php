@@ -44,7 +44,7 @@ class CaveSpider extends Spider{
 	}
 
 	public function getName() : string{
-		return "CaveSpider";
+		return "Cave Spider";
 	}
 
 	public function onCollideWithEntity(Entity $entity) : void{

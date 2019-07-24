@@ -69,7 +69,7 @@ class PolarBear extends Animal
         public
         function getName(): string
         {
-            return "PolarBear";
+            return "Polar Bear";
         }
 
         public function setTargetEntity(?Entity $target) : void{
