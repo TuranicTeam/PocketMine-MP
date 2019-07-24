@@ -41,7 +41,7 @@ class JumpAttackBehavior extends Behavior{
 	public function canStart() : bool{
 		$target = $this->mob->getTargetEntity();
 		if($target == null) return false;
-		if(!$target->isAlive()) return true;
+		if(!$target->isAlive()) return false;
 
 		$distance = $this->mob->distance($target);
 

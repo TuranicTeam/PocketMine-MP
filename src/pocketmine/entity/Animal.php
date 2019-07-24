@@ -48,8 +48,8 @@ abstract class Animal extends Mob implements Ageable{
 		return 120;
 	}
 
-	public function isBreedingItem(Item $item) : bool{ // TODO: Apply this to all animals
-		return $item->getId() === Item::WHEAT;
+	public function isBreedingItem(Item $item) : bool{ // TODO: Change it to not breed all animals with same item
+	    return $item->getId() === Item::WHEAT;
 	}
 
 	public function onInteract(Player $player, Item $item, Vector3 $clickPos) : bool{

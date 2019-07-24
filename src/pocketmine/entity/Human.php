@@ -292,7 +292,7 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		$ev = new PlayerExhaustEvent($this, $amount, $cause);
 		$ev->call();
 		if($ev->isCancelled()){
-			return 1;
+			return 0.0;
 		}
 
 		$exhaustion = $this->getExhaustion();

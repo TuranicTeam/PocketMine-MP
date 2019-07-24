@@ -34,6 +34,7 @@ use pocketmine\entity\behavior\OwnerHurtByTargetBehavior;
 use pocketmine\entity\behavior\OwnerHurtTargetBehavior;
 use pocketmine\entity\behavior\RandomLookAroundBehavior;
 use pocketmine\entity\behavior\SittingBehavior;
+use pocketmine\entity\behavior\TemptedBehavior;
 use pocketmine\entity\behavior\WanderBehavior;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Tamable;
@@ -54,10 +55,11 @@ class Wolf extends Tamable{
 		$this->behaviorPool->setBehavior(1, new SittingBehavior($this));
 		$this->behaviorPool->setBehavior(2, new JumpAttackBehavior($this, 1.0));
 		$this->behaviorPool->setBehavior(3, new MeleeAttackBehavior($this, 2.0));
-		$this->behaviorPool->setBehavior(4, new FollowOwnerBehavior($this, 2.0));
-		$this->behaviorPool->setBehavior(5, new WanderBehavior($this, 1.0));
-		$this->behaviorPool->setBehavior(6, new LookAtPlayerBehavior($this, 8.0));
-		$this->behaviorPool->setBehavior(7, new RandomLookAroundBehavior($this));
+        $this->behaviorPool->setBehavior(4, new TemptedBehavior($this, [Item::BONE], 0.8));
+		$this->behaviorPool->setBehavior(5, new FollowOwnerBehavior($this, 1.0));
+		$this->behaviorPool->setBehavior(6, new WanderBehavior($this, 1.0));
+		$this->behaviorPool->setBehavior(7, new LookAtPlayerBehavior($this, 8.0));
+		$this->behaviorPool->setBehavior(8, new RandomLookAroundBehavior($this));
 
 		$this->targetBehaviorPool->setBehavior(0, new HurtByTargetBehavior($this));
 		$this->targetBehaviorPool->setBehavior(1, new OwnerHurtByTargetBehavior($this));
