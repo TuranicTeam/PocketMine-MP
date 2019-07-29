@@ -21,7 +21,7 @@
 
 declare(strict_types=1);
 
-namespace pocketmine\entity\passive;
+namespace pocketmine\entity\hostile;
 
 use pocketmine\entity\behavior\JumpAttackBehavior;
 use pocketmine\entity\behavior\MeleeAttackBehavior;
