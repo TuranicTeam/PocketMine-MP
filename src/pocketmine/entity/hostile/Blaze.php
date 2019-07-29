@@ -95,7 +95,7 @@ class Blaze extends Monster implements RangedAttackerMob{
 	public function onRangedAttackToTarget(Entity $target, float $power) : void{
 		$dv = $target->subtract($this)->normalize();
 		$fireball = new SmallFireball($this->level, Entity::createBaseNBT($this->add($this->random->nextFloat() * $power, $this->getEyeHeight(), $this->random->nextFloat() * $power), $dv), $this);
-		$fireball->setMotion($dv->multiply(2));
+		$fireball->setMotion($dv->multiply($power));
 		$fireball->spawnToAll();
 	}
 

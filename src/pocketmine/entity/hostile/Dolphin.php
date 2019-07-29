@@ -58,7 +58,7 @@ class Dolphin extends WaterAnimal{
 	}
 
 	public function getName() : string{
-		return "Salmon";
+		return "Dolphin";
 	}
 
 	public function attack(EntityDamageEvent $source) : void{
@@ -68,7 +68,7 @@ class Dolphin extends WaterAnimal{
 		}
 
 		if($source instanceof EntityDamageByEntityEvent){
-			$this->swimSpeed = mt_rand(150, 350) / 2000;
+			$this->swimSpeed = mt_rand(350, 650) / 2000;
 			$e = $source->getDamager();
 			if($e !== null){
 				$this->swimDirection = (new Vector3($this->x - $e->x, $this->y - $e->y, $this->z - $e->z))->normalize();

@@ -30,7 +30,7 @@ use pocketmine\entity\behavior\MateBehavior;
 use pocketmine\entity\behavior\PanicBehavior;
 use pocketmine\entity\behavior\RandomLookAroundBehavior;
 use pocketmine\entity\behavior\SittingBehavior;
-use pocketmine\entity\behavior\TemptedBehavior;
+use pocketmine\entity\behavior\TemptBehavior;
 use pocketmine\entity\Tamable;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -54,7 +54,7 @@ class Ocelot extends Tamable{
 		$this->behaviorPool->setBehavior(3, new PanicBehavior($this, 2.0));
 		$this->behaviorPool->setBehavior(4, new LookAtPlayerBehavior($this, 14.0));
 		$this->behaviorPool->setBehavior(5, new RandomLookAroundBehavior($this));
-		$this->behaviorPool->setBehavior(6, new TemptedBehavior($this, [Item::RAW_SALMON, Item::RAW_FISH], 1.0));
+		$this->behaviorPool->setBehavior(6, new TemptBehavior($this, [Item::RAW_SALMON, Item::RAW_FISH], 1.0));
 		$this->behaviorPool->setBehavior(7, new SittingBehavior($this));
 		// TODO: attack turtle and rabbit
 	}

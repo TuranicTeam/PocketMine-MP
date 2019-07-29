@@ -31,7 +31,7 @@ use pocketmine\entity\behavior\LookAtPlayerBehavior;
 use pocketmine\entity\behavior\MateBehavior;
 use pocketmine\entity\behavior\MeleeAttackBehavior;
 use pocketmine\entity\behavior\RandomLookAroundBehavior;
-use pocketmine\entity\behavior\WanderBehavior;
+use pocketmine\entity\behavior\RandomStrollBehavior;
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
@@ -50,7 +50,7 @@ class PolarBear extends Animal
         $this->behaviorPool->setBehavior(1, new MateBehavior($this, 1.0));
         $this->behaviorPool->setBehavior(2, new MeleeAttackBehavior($this, 1.0));
         $this->behaviorPool->setBehavior(3, new FollowParentBehavior($this, 1.1));
-        $this->behaviorPool->setBehavior(4, new WanderBehavior($this, 1.0));
+        $this->behaviorPool->setBehavior(4, new RandomStrollBehavior($this, 1.0));
         $this->behaviorPool->setBehavior(5, new LookAtPlayerBehavior($this, 16.0));
         $this->behaviorPool->setBehavior(6, new RandomLookAroundBehavior($this));
 

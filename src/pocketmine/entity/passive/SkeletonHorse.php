@@ -32,7 +32,7 @@ use pocketmine\entity\behavior\LookAtPlayerBehavior;
 use pocketmine\entity\behavior\MateBehavior;
 use pocketmine\entity\behavior\PanicBehavior;
 use pocketmine\entity\behavior\RandomLookAroundBehavior;
-use pocketmine\entity\behavior\WanderBehavior;
+use pocketmine\entity\behavior\RandomStrollBehavior;
 use pocketmine\inventory\HorseInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
@@ -83,7 +83,7 @@ class SkeletonHorse extends AbstractHorse implements InventoryHolder{
         $this->behaviorPool->setBehavior(2, new PanicBehavior($this, 1.25));
         $this->behaviorPool->setBehavior(3, new MateBehavior($this, 1.0));
         $this->behaviorPool->setBehavior(5, new FollowParentBehavior($this, 1.1));
-        $this->behaviorPool->setBehavior(6, new WanderBehavior($this, 1.0));
+        $this->behaviorPool->setBehavior(6, new RandomStrollBehavior($this, 1.0));
         $this->behaviorPool->setBehavior(7, new LookAtPlayerBehavior($this, 6.0));
         $this->behaviorPool->setBehavior(8, new RandomLookAroundBehavior($this));
     }

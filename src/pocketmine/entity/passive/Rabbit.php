@@ -28,7 +28,7 @@ use pocketmine\entity\behavior\LookAtPlayerBehavior;
 use pocketmine\entity\behavior\MateBehavior;
 use pocketmine\entity\behavior\PanicBehavior;
 use pocketmine\entity\behavior\RandomLookAroundBehavior;
-use pocketmine\entity\behavior\TemptedBehavior;
+use pocketmine\entity\behavior\TemptBehavior;
 use pocketmine\entity\Tamable;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
@@ -47,7 +47,7 @@ class Rabbit extends Tamable{
         $this->behaviorPool->setBehavior(3, new PanicBehavior($this, 2.0));
         $this->behaviorPool->setBehavior(4, new LookAtPlayerBehavior($this, 14.0));
         $this->behaviorPool->setBehavior(5, new RandomLookAroundBehavior($this));
-        $this->behaviorPool->setBehavior(6, new TemptedBehavior($this, [Item::CARROT], 1.0));
+        $this->behaviorPool->setBehavior(6, new TemptBehavior($this, [Item::CARROT], 1.0));
         // TODO: running away from player
     }
 
