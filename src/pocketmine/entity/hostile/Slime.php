@@ -50,8 +50,6 @@ class Slime extends Monster{
 
 	public const NETWORK_ID = self::SLIME;
 
-	public const DATA_SLIME_SIZE = 16;
-
 	public $height = 0;
 	public $width = 0;
 
@@ -85,7 +83,7 @@ class Slime extends Monster{
 		}else{
 			$i = $this->random->nextBoundedInt(3);
 
-			if($i < 2 and $this->random->nextFloat() < 0.5 * $this->level->getDifficulty()){
+			if($i < 2 and $this->random->nextFloat() < 0.5){
 				$i++;
 			}
 
@@ -130,13 +128,13 @@ class Slime extends Monster{
 		return Particle::TYPE_SLIME;
 	}
 
-	public function onBehaviorUpdate() : void{
+	public function onUpdate(int $currentTick) : bool{
 		$this->squishFactor += ($this->squishAmount - $this->squishFactor) * 0.5;
 		$this->prevSquishFactor = $this->squishFactor;
 
-		parent::onBehaviorUpdate();
+		$hasUpdate = parent::onUpdate($currentTick);
 
-		$this->setNameTag("" . intval($this->onGround) . "-" . intval($this->wasOnGround));
+		// TODO: Find data property or entity event for squish factor
 
 		if(!$this->isImmobile()){
 			if($this->onGround and !$this->wasOnGround){
@@ -164,6 +162,8 @@ class Slime extends Monster{
 		$this->wasOnGround = $this->onGround;
 
 		$this->alterSquishAmount();
+
+		return $hasUpdate;
 	}
 
 	protected function alterSquishAmount() : void{
@@ -177,7 +177,9 @@ class Slime extends Monster{
 		return $this->random->nextBoundedInt(20) + 10;
 	}
 
-	public function kill() : void{
+	public function onDeath() : void{
+		parent::onDeath();
+
 		$i = $this->getSlimeSize();
 
 		if($i > 1){
@@ -187,7 +189,7 @@ class Slime extends Monster{
 				$f = (($k % 2) - 0.5) * $i / 4;
 				$f1 = (($k / 2) - 0.5) * $i / 4;
 
-				$slime = Entity::createEntity(self::NETWORK_ID, $this->level, Entity::createBaseNBT($this));
+				$slime = Entity::createEntity(static::NETWORK_ID, $this->level, Entity::createBaseNBT($this));
 
 				if($slime instanceof Slime){
 					if($this->getNameTag() !== ""){
@@ -202,8 +204,6 @@ class Slime extends Monster{
 				}
 			}
 		}
-
-		parent::kill();
 	}
 
 	// TODO: Collision with IronGolem
