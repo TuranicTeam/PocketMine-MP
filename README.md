@@ -1,7 +1,7 @@
-<h1>Altay<img src="http://fs1.directupload.net/images/180401/urn5z9ic.png" height="64" width="64" align="left"></img></h1>
+<h1>Türkensoftware<img src="http://fs1.directupload.net/images/180401/urn5z9ic.png" height="64" width="64" align="left"></img></h1>
 <br />
 
-A feature-rich server software for Minecraft: Bedrock/W10 Edition. Altay is a fork of [pmmp](https://github.com/pmmp/PocketMine-MP)
+Digger das ist scheisse . Altay is a fork of [pmmp](https://github.com/pmmp/PocketMine-MP)
 
 | Jenkins | TravisCI | Discord | Twitter |
 | :---: | :---: | :---: | :---: |
@@ -25,7 +25,7 @@ Yes, you can.
 
 Here. Some servers that using Altay software:
 
-- **entengames.net:19132**
+- **dupegames.d:19132**
 - **play.oyungg.net:19132**
 - **play.zerotouch.tk:19132**
 - **angelpe.hu:19132**
