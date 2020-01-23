@@ -2193,7 +2193,7 @@ class Level implements ChunkManager, Metadatable{
 						continue;
 					}
 
-					foreach($filters as $filter){
+					foreach($entity as $filter){
 						if($filter !== null){
 							if(!$filter($entity)){
 								continue;
