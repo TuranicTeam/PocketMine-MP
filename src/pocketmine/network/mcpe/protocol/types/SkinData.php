@@ -51,8 +51,6 @@ class SkinData{
 	private $capeId;
 	/** @var string */
 	private $fullSkinId;
-
-
 	/** @var string */
 	private $armSize;
 	/** @var string */
@@ -62,15 +60,11 @@ class SkinData{
 	/** @var PersonaPieceTintColor[] */
 	private $pieceTintColors;
 
-
-
-
 	/**
 	 * @param SkinAnimation[] $animations
-	 * @param PersonaSkinPiece $personaPieces
-	 * @param PersonaPieceTintColor $pieceTintColors
 	 */
-	public function __construct(string $skinId, string $resourcePatch, SkinImage $skinImage, array $animations = [], SkinImage $capeImage = null, string $geometryData = "", string $animationData = "", bool $premium = false, bool $persona = false, bool $personaCapeOnClassic = false, string $capeId = "", ?string $fullSkinId = null, string $armSize = "", string $skinColor = "", array $personaPieces = [], array $pieceTintColors = []){		$this->skinId = $skinId;
+	public function __construct(string $skinId, string $resourcePatch, SkinImage $skinImage, array $animations = [], SkinImage $capeImage = null, string $geometryData = "", string $animationData = "", bool $premium = false, bool $persona = false, bool $personaCapeOnClassic = false, string $capeId = "", ?string $fullSkinId = null, string $armSize = "", string $skinColor = "", array $personaPieces = [], array $pieceTintColors = []){
+		$this->skinId = $skinId;
 		$this->resourcePatch = $resourcePatch;
 		$this->skinImage = $skinImage;
 		$this->animations = $animations;
@@ -81,34 +75,24 @@ class SkinData{
 		$this->persona = $persona;
 		$this->personaCapeOnClassic = $personaCapeOnClassic;
 		$this->capeId = $capeId;
-		$this->skinColor = $skinColor;
-		$this->armSize = $armSize;
-		$this->personaPieces = $personaPieces;
-		$this->pieceTintColors = $pieceTintColors;
 		//this has to be unique or the client will do stupid things
 		$this->fullSkinId = $fullSkinId ?? UUID::fromRandom()->toString();
+		$this->armSize = $armSize;
+		$this->skinColor = $skinColor;
+		$this->personaPieces = $personaPieces;
+		$this->pieceTintColors = $pieceTintColors;
 	}
 
 	public function getSkinId() : string{
 		return $this->skinId;
 	}
 
-
 	/**
 	 * @return PersonaSkinPiece[]
 	 */
-	public function getPersonaPieces(): array
+	public function getPersonaPieces() : array
 	{
 		return $this->personaPieces;
-	}
-
-
-	/**
-	 * @return PersonaPieceTintColor[]
-	 */
-	public function getPieceTintColors(): array
-	{
-		return $this->pieceTintColors;
 	}
 
 	public function getResourcePatch() : string{
@@ -157,22 +141,19 @@ class SkinData{
 	public function getFullSkinId() : string{
 		return $this->fullSkinId;
 	}
-
-
-	/**
-	 * @return string
-	 */
-	public function getArmSize(): string
-	{
+	public function getArmSize() : string{
 		return $this->armSize;
+	}
+
+	public function getSkinColor() : string{
+		return $this->skinColor;
 	}
 
 
 	/**
-	 * @return string
+	 * @return PersonaPieceTintColor[]
 	 */
-	public function getSkinColor(): string
-	{
-		return $this->skinColor;
+	public function getPieceTintColors() : array{
+		return $this->pieceTintColors;
 	}
 }

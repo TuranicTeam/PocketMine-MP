@@ -103,8 +103,6 @@ class NetworkBinaryStream extends BinaryStream{
 		$fullSkinId = $this->getString();
 		$armSize = $this->getString();
 		$skinColor = $this->getString();
-
-		//ADDED STUFF
 		$personaPieceCount = $this->getLInt();
 		$personaPieces = [];
 		for($i = 0; $i < $personaPieceCount; ++$i){
@@ -132,7 +130,8 @@ class NetworkBinaryStream extends BinaryStream{
 		}
 
 
-		return new SkinData($skinId, $skinResourcePatch, $skinData, $animations, $capeData, $geometryData, $animationData, $premium, $persona, $capeOnClassic, $capeId, $fullSkinId, $armSize, $skinColor, $personaPieces, $pieceTintColors);	}
+		return new SkinData($skinId, $skinResourcePatch, $skinData, $animations, $capeData, $geometryData, $animationData, $premium, $persona, $capeOnClassic, $capeId, $fullSkinId, $armSize, $skinColor, $personaPieces, $pieceTintColors);
+	}
 
 	/**
 	 * @return void
@@ -157,6 +156,7 @@ class NetworkBinaryStream extends BinaryStream{
 		$this->putString($skin->getFullSkinId());
 		$this->putString($skin->getArmSize());
 		$this->putString($skin->getSkinColor());
+
 		$this->putLInt(count($skin->getPersonaPieces()));
 		foreach($skin->getPersonaPieces() as $piece){
 			$this->putString($piece->getPieceId());
@@ -173,7 +173,10 @@ class NetworkBinaryStream extends BinaryStream{
 				$this->putString($color);
 			}
 		}
+
 	}
+
+
 
 	private function getSkinImage() : SkinImage{
 		$width = $this->getLInt();
