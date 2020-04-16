@@ -401,6 +401,8 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	/** @var bool */
 	protected $keepExperience = false;
 
+
+
 	/**
 	 * @return TranslationContainer|string
 	 */
