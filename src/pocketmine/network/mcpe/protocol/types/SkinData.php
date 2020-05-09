@@ -38,7 +38,7 @@ class SkinData{
 	private $skinImage;
 	/** @var SkinAnimation[] */
 	private $animations;
-	/** @var SkinImage */
+	/** @var null|SkinImage */
 	private $capeImage;
 	/** @var string */
 	private $geometryData;
@@ -110,7 +110,7 @@ class SkinData{
 		return $this->animations;
 	}
 
-	public function getCapeImage() : SkinImage{
+	public function getCapeImage() : ?SkinImage{
 		return $this->capeImage;
 	}
 
