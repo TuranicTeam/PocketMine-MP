@@ -131,7 +131,7 @@ interface EntityIds{
 	public const FOX = 121;
 	public const BEE = 122;
 	public const PIGLIN = 123;
-	public const HOGLINE = 124;
+	public const HOGLIN = 124;
 	public const STRIDER = 125;
-	public const HOGLINE = 126;
+	public const ZOGLIN = 126;
 }
