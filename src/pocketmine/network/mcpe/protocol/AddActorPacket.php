@@ -151,7 +151,6 @@ class AddActorPacket extends DataPacket{
 		
 	];
 	
-
 	/** @var int|null */
 	public $entityUniqueId = null; //TODO
 	/** @var int */
