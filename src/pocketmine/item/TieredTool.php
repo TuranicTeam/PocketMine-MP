@@ -54,7 +54,7 @@ abstract class TieredTool extends Tool{
 			self::TIER_STONE => 132,
 			self::TIER_IRON => 251,
 			self::TIER_DIAMOND => 1562,
-			self::TIER_NETHERITE => 2033
+			self::TIER_NETHERITE => 2032
 		];
 
 		if(!isset($levels[$tier])){
