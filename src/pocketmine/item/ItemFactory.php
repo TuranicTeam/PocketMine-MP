@@ -119,7 +119,7 @@ class ItemFactory{
 		self::registerItem(new DiamondChestplate());
 		self::registerItem(new DiamondLeggings());
 		self::registerItem(new DiamondBoots());
-		self::registerItem(new NetheriteHelmeth());
+		self::registerItem(new NetheriteHelmet());
 		self::registerItem(new NetheriteChestplate());
 		self::registerItem(new NetheriteLeggings());
 		self::registerItem(new NetheriteBoots());
