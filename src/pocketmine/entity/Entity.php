@@ -60,6 +60,7 @@ use pocketmine\entity\passive\Mooshroom;
 use pocketmine\entity\passive\Pig;
 use pocketmine\entity\passive\Sheep;
 use pocketmine\entity\passive\Squid;
+use pocketmine\entity\passive\Dolphin;
 use pocketmine\entity\passive\Villager;
 use pocketmine\entity\passive\Wolf;
 use pocketmine\entity\projectile\Arrow;
@@ -398,6 +399,7 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 		Entity::registerEntity(Snowball::class, false, ['Snowball', 'minecraft:snowball']);
 		Entity::registerEntity(SplashPotion::class, false, ['ThrownPotion', 'minecraft:potion', 'thrownpotion']);
 		Entity::registerEntity(Squid::class, false, ['Squid', 'minecraft:squid']);
+		Entity::registerEntity(Dolphin::class, false, ['Dolphin', 'minecraft:dolphin']);
 		Entity::registerEntity(Villager::class, false, ['Villager', 'minecraft:villager']);
 		Entity::registerEntity(Wolf::class, false, ['Wolf', 'minecraft:wolf']);
 		Entity::registerEntity(Zombie::class, false, ['Zombie', 'minecraft:zombie']);

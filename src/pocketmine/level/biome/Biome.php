@@ -39,6 +39,7 @@ use pocketmine\entity\passive\Cow;
 use pocketmine\entity\passive\Pig;
 use pocketmine\entity\passive\Sheep;
 use pocketmine\entity\passive\Squid;
+use pocketmine\entity\passive\Dolphin;
 use pocketmine\entity\WaterAnimal;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\populator\Populator;
@@ -117,6 +118,7 @@ abstract class Biome{
 		//$this->spawnableMonsterList[] = new SpawnListEntry(Enderman::class, 10, 1, 4);
 		//$this->spawnableMonsterList[] = new SpawnListEntry(Witch::class, 5, 1, 1);
 		$this->spawnableWaterCreatureList[] = new SpawnListEntry(Squid::class, 10, 4, 4);
+		$this->spawnableWaterCreatureList[] = new SpawnListEntry(Dolphin::class, 10, 4, 4);
 		//$this->spawnableCaveCreatureList[] = new SpawnListEntry(Bat::class, 10, 8, 8);
 	}
 
