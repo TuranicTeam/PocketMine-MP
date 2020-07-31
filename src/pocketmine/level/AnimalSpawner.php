@@ -68,11 +68,14 @@ class AnimalSpawner{
 	 * @param array $eligibleChunks
 	 */
 	public function findChunksForSpawning(Level $level, bool $spawnHostileMobs, bool $spawnPeacefulMobs, array $eligibleChunks) : void{
+		$t = $level->getTime() % 24000;
+		$dayTime = ($t < 12300 or $t > 23850) ? true : false;
+
 		if($spawnHostileMobs or $spawnPeacefulMobs){
 			$spawn = $level->getSpawnLocation();
 
 			foreach(self::$creatureTypes as $creatureType){
-				if((!$creatureType->isPeacefulCreature() or $spawnPeacefulMobs) and ($creatureType->isPeacefulCreature() or $spawnHostileMobs) and ($creatureType->getCreatureClass() !== Animal::class or ($level->getTime() % 400) === 0)){
+				if((!$creatureType->isPeacefulCreature() or $spawnPeacefulMobs) and ($creatureType->isPeacefulCreature() or $spawnHostileMobs) and ($creatureType->getCreatureClass() !== Animal::class or $dayTime)) {
 					$a = $creatureType->getCreatureClass();
 					$j4 = count(array_filter($level->getEntities(), function(Entity $entity) use ($a){
 						return is_a($entity, $a);
