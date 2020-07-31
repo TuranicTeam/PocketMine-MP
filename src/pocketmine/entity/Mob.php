@@ -348,7 +348,8 @@ abstract class Mob extends Living{
 	 * @return bool
 	 */
 	public function canSpawnHere() : bool{
-		return parent::canSpawnHere() and $this->getBlockPathWeight($this) > 0;
+		return parent::canSpawnHere();
+		#return parent::canSpawnHere() and $this->getBlockPathWeight($this) > 0;
 	}
 
 	public function moveWithHeading(float $strafe, float $forward){
