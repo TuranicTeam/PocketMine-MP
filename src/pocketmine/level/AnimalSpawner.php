@@ -79,7 +79,7 @@ class AnimalSpawner{
 					}));
 					$k4 = $creatureType->getMaxSpawn() * count($eligibleChunks) / self::MAX_MOBS;
 
-					if($j4 <= $k4){
+					if($j4 < $k4){
 						foreach($eligibleChunks as $chunkHash){
 							Level::getXZ($chunkHash, $cx, $cz);
 							if(count($level->getChunkEntities($cx, $cz)) === 0){
