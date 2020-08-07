@@ -1158,7 +1158,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 			])
 		);
 		$ev->call();
-		if(strlen(trim((string) $ev->getJoinMessage())) > 0){
+		if(((string) $ev->getJoinMessage())!== null){
 			$this->server->broadcastMessage($ev->getJoinMessage());
 		}
 
