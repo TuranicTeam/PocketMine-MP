@@ -36,7 +36,10 @@ use pocketmine\entity\Monster;
 use pocketmine\entity\passive\Cat;
 use pocketmine\entity\passive\Chicken;
 use pocketmine\entity\passive\Cow;
+use pocketmine\entity\passive\Dolphin;
+use pocketmine\entity\passive\PolarBear;
 use pocketmine\entity\passive\Pig;
+use pocketmine\entity\passive\Rabbit;
 use pocketmine\entity\passive\Sheep;
 use pocketmine\entity\passive\Squid;
 use pocketmine\entity\WaterAnimal;
@@ -104,7 +107,8 @@ abstract class Biome{
 
 	public function __construct(){
 		$this->spawnableCreatureList[] = new SpawnListEntry(Sheep::class, 12, 4, 4);
-		//$this->spawnableCreatureList[] = new SpawnListEntry(Rabbit::class, 10, 3, 3);
+		$this->spawnableCreatureList[] = new SpawnListEntry(Rabbit::class, 10, 3, 3);
+		$this->spawnableCreatureList[] = new SpawnListEntry(PolarBear::class, 10, 3, 3);
 		$this->spawnableCreatureList[] = new SpawnListEntry(Pig::class, 10, 4, 4);
 		$this->spawnableCreatureList[] = new SpawnListEntry(Chicken::class, 10, 4, 4);
 		$this->spawnableCreatureList[] = new SpawnListEntry(Cow::class, 8, 4, 4);
@@ -117,6 +121,7 @@ abstract class Biome{
 		//$this->spawnableMonsterList[] = new SpawnListEntry(Enderman::class, 10, 1, 4);
 		//$this->spawnableMonsterList[] = new SpawnListEntry(Witch::class, 5, 1, 1);
 		$this->spawnableWaterCreatureList[] = new SpawnListEntry(Squid::class, 10, 4, 4);
+		$this->spawnableWaterCreatureList[] = new SpawnListEntry(Dolphin::class, 10, 4, 4);
 		//$this->spawnableCaveCreatureList[] = new SpawnListEntry(Bat::class, 10, 8, 8);
 	}
 
