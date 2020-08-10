@@ -107,7 +107,7 @@ abstract class Biome{
 
 	public function __construct(){
 		$this->spawnableCreatureList[] = new SpawnListEntry(Sheep::class, 12, 4, 4);
-		$this->spawnableCreatureList[] = new SpawnListEntry(Rabbit::class, 10, 3, 3);
+		$this->spawnableCreatureList[] = new SpawnListEntry(Rabbit::class, 10, 4, 4);
 		$this->spawnableCreatureList[] = new SpawnListEntry(PolarBear::class, 10, 3, 3);
 		$this->spawnableCreatureList[] = new SpawnListEntry(Pig::class, 10, 4, 4);
 		$this->spawnableCreatureList[] = new SpawnListEntry(Chicken::class, 10, 4, 4);
