@@ -742,7 +742,7 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 
 		$type = $source->getCause();
 		if($type !== EntityDamageEvent::CAUSE_SUICIDE and $type !== EntityDamageEvent::CAUSE_VOID
-			and ($this->inventory->getItemInHand() instanceof Totem or $this->offHandInventory->getItemInOffHand() instanceof Totem)){ //TODO: check offhand as well (when it's implemented)
+			and ($this->inventory->getItemInHand() instanceof Totem or $this->offHandInventory->getItemInOffHand() instanceof Totem)){
 
 			$compensation = $this->getHealth() - $source->getFinalDamage() - 1;
 			if($compensation < 0){
