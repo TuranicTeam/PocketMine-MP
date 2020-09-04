@@ -67,7 +67,7 @@ class SetBlockCommand extends VanillaCommand{
 		$y = $this->getRelativeDouble($sender->y, $sender, $args[1], 0, 256);
 		$z = $this->getRelativeDouble($sender->z, $sender, $args[2]);
 		$pos = [
-            (int) $x, (int) $y, (int) $z
+			(int) $x, (int) $y, (int) $z
 		];
 		if(!$level->isInWorld(...$pos)){
 			$sender->sendMessage(new TranslationContainer(TextFormat::RED . "%commands.setblock.outOfWorld"));
