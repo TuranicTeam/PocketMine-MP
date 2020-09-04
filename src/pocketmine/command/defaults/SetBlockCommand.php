@@ -64,8 +64,8 @@ class SetBlockCommand extends VanillaCommand{
 
 		$level = $sender->level;
 		$x = $this->getRelativeDouble($sender->x, $sender, $args[0]);
-        $y = $this->getRelativeDouble($sender->y, $sender, $args[1], 0, 256);
-        $z = $this->getRelativeDouble($sender->z, $sender, $args[2]);
+		$y = $this->getRelativeDouble($sender->y, $sender, $args[1], 0, 256);
+		$z = $this->getRelativeDouble($sender->z, $sender, $args[2]);
 		$pos = [
             (int) $x, (int) $y, (int) $z
 		];
