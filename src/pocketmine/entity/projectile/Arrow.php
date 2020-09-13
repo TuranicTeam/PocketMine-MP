@@ -176,12 +176,10 @@ class Arrow extends Projectile{
 		$item = ItemFactory::get(Item::ARROW, 0, 1);
 
 		$pickupInventory = $player->getOffHandInventory();
-		if($player->isSurvival()){
-			if(!$pickupInventory->getItemInOffHand()->equals($item)){
-				$pickupInventory = $player->getInventory();
-				if(!$pickupInventory->canAddItem($item)){
-					return;
-				}
+		if(!$pickupInventory->getItemInOffHand()->equals($item)){
+			$pickupInventory = $player->getInventory();
+			if(!$pickupInventory->canAddItem($item) and $player->isSurvival()){
+				return;
 			}
 		}
 
