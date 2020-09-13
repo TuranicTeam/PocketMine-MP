@@ -177,7 +177,7 @@ class Arrow extends Projectile{
 
 		$pickupInventory = $player->getOffHandInventory();
 		if($player->isSurvival()){
-			if(!$pickupInventory->canAddItem($item)){
+			if(!$pickupInventory->getItemInOffHand()->equals($item)){
 				$pickupInventory = $player->getInventory();
 				if(!$pickupInventory->canAddItem($item)){
 					return;
