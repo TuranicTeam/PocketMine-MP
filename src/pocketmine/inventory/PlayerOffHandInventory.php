@@ -56,6 +56,7 @@ class PlayerOffHandInventory extends BaseInventory{
 
 	public function setItemInOffHand(Item $item) : void{
 		$this->setItem(0, $item);
+		$this->holder->getDataPropertyManager()->setByte(Player::DATA_COLOR,Player::DATA_TYPE_BYTE);
 	}
 
 	public function getItemInOffHand() : Item{
