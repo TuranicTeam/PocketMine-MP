@@ -170,7 +170,7 @@ class FishingHook extends Projectile{
 
 					$bb2 = new AxisAlignedBB($bb->minX, $d1, $bb->minZ, $bb->maxX, $d3, $bb->maxZ);
 
-					if($this->level->isLiquidInBoundingBox($bb2, new Water())){
+					if($this->level->isLiquidInBoundingBox($bb2)){
 						$d10 += 0.2;
 					}
 				}

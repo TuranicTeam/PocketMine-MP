@@ -23,7 +23,9 @@ declare(strict_types=1);
 
 namespace pocketmine\entity;
 
+use pocketmine\block\Water;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\math\Vector3;
 
 abstract class WaterAnimal extends Mob implements Ageable{
 
@@ -39,6 +41,10 @@ abstract class WaterAnimal extends Mob implements Ageable{
 
 	public function canSpawnHere() : bool{
 		return true;
+	}
+
+	public function getBlockPathWeight(Vector3 $pos) : float{
+		return $this->level->getBlock($pos) instanceof Water ? 10 : 0;
 	}
 
 	public function onAirExpired() : void{

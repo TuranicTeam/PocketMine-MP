@@ -24,6 +24,8 @@ declare(strict_types=1);
 
 namespace pocketmine\entity\behavior;
 
+use pocketmine\entity\pathfinding\navigate\PathNavigateGround;
+
 class RestrictSunBehavior extends Behavior{
 
 	public function canStart() : bool{
@@ -31,10 +33,16 @@ class RestrictSunBehavior extends Behavior{
 	}
 
 	public function onStart() : void{
-		$this->mob->getNavigator()->setAvoidsSun(true);
+		$navigator = $this->mob->getNavigator();
+		if($navigator instanceof PathNavigateGround){
+			$navigator->setAvoidSun(true);
+		}
 	}
 
 	public function onEnd() : void{
-		$this->mob->getNavigator()->setAvoidsSun(false);
+		$navigator = $this->mob->getNavigator();
+		if($navigator instanceof PathNavigateGround){
+			$navigator->setAvoidSun(false);
+		}
 	}
 }

@@ -24,52 +24,56 @@ declare(strict_types=1);
 
 namespace pocketmine\entity\behavior;
 
-use pocketmine\block\Block;
 use pocketmine\block\Water;
 use pocketmine\entity\Mob;
-use pocketmine\math\Vector3;
+use pocketmine\entity\utils\RandomPositionGenerator;
 
-class FleeSunBehavior extends Behavior{
+class RandomSwimBehavior extends Behavior{
 
 	/** @var float */
 	protected $speedMultiplier = 1.0;
-	/** @var Vector3 */
-	protected $shelter;
+	/** @var int */
+	protected $interval = 120;
+	protected $xzDist;
+	protected $yDist;
 
-	public function __construct(Mob $mob, float $speedMultiplier = 1.0){
+	protected $targetPos;
+
+	public function __construct(Mob $mob, float $speedMultiplier = 1.0, int $xzDist = 10, int $yDist = 7, int $interval = 120){
 		parent::__construct($mob);
 
 		$this->speedMultiplier = $speedMultiplier;
+		$this->interval = $interval;
+		$this->xzDist = $xzDist;
+		$this->yDist = $yDist;
+
 		$this->mutexBits = 1;
 	}
 
 	public function canStart() : bool{
-		if($this->mob->isOnFire() and $this->mob->level->isDayTime() and $this->mob->level->canSeeSky($this->mob->floor())){
-			$this->shelter = $this->findPossibleShelter();
+		if($this->interval <= 0 or $this->random->nextBoundedInt($this->interval) === 0){
+			$pos = RandomPositionGenerator::findRandomTargetBlock($this->mob, $this->xzDist, $this->yDist);
 
-			return $this->shelter !== null;
+			if($pos instanceof Water){
+				$this->targetPos = $pos;
+
+				return true;
+			}
 		}
 
 		return false;
-	}
-
-	public function onStart() : void{
-		$this->mob->getNavigator()->tryMoveToPos($this->shelter, $this->speedMultiplier);
 	}
 
 	public function canContinue() : bool{
 		return !$this->mob->getNavigator()->noPath();
 	}
 
-	public function findPossibleShelter() : ?Block{
-		for($i = 0; $i < 10; $i++){
-			$block = $this->mob->level->getBlock($this->mob->add($this->random->nextBoundedInt(20) - 10, $this->random->nextBoundedInt(6) - 3, $this->random->nextBoundedInt(20) - 10));
-			$canSeeSky = $this->mob->level->canSeeSky($block);
-			if(!$block->isSolid() and ($block instanceof Water or !$canSeeSky)){
-				return $block;
-			}
-		}
+	public function onStart() : void{
+		$this->mob->getNavigator()->tryMoveToPos($this->targetPos, $this->speedMultiplier);
+	}
 
-		return null;
+	public function onEnd() : void{
+		$this->targetPos = null;
+		$this->mob->getNavigator()->clearPathEntity();
 	}
 }

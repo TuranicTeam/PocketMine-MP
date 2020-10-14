@@ -51,7 +51,7 @@ class MountPathingBehavior extends Behavior{
 					$pos = RandomPositionGenerator::findRandomTargetBlock($this->mob, 10, 7);
 
 					if($pos !== null){
-						$this->mob->getNavigator()->tryMoveTo($pos, 1, $this->mob->distanceSquared($pos) + 2);
+						$this->mob->getNavigator()->tryMoveToPos($pos, 1);
 					}
 				}
 

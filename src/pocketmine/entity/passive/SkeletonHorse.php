@@ -32,9 +32,9 @@ use pocketmine\entity\behavior\LookAtPlayerBehavior;
 use pocketmine\entity\behavior\MateBehavior;
 use pocketmine\entity\behavior\PanicBehavior;
 use pocketmine\entity\behavior\RandomLookAroundBehavior;
-use pocketmine\entity\behavior\TemptBehavior;
 use pocketmine\entity\behavior\RandomStrollBehavior;
 use pocketmine\inventory\HorseInventory;
+use pocketmine\item\ItemFactory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
 use pocketmine\math\Vector3;
@@ -42,23 +42,9 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\Player;
 
-class Horse extends AbstractHorse implements InventoryHolder{
+class SkeletonHorse extends AbstractHorse implements InventoryHolder{
 
-	public const NETWORK_ID = self::HORSE;
-
-	public const HORSE_VARIANT_WHITE = 0;
-	public const HORSE_VARIANT_CREAMY = 1;
-	public const HORSE_VARIANT_CHESTNUT = 2;
-	public const HORSE_VARIANT_BROWN = 3;
-	public const HORSE_VARIANT_BLACK = 4;
-	public const HORSE_VARIANT_GRAY = 5;
-	public const HORSE_VARIANT_DARK_BROWN = 6;
-
-	public const HORSE_MARK_VARIANT_NONE = 0;
-	public const HORSE_MARK_VARIANT_WHITE = 1;
-	public const HORSE_MARK_VARIANT_WHITE_FIELD = 2;
-	public const HORSE_MARK_VARIANT_WHITE_DOTS = 3;
-	public const HORSE_MARK_VARIANT_BLACK_DOTS = 4;
+	public const NETWORK_ID = self::SKELETON_HORSE;
 
 	public $width = 1.4;
 	public $height = 1.6;
@@ -67,7 +53,7 @@ class Horse extends AbstractHorse implements InventoryHolder{
 	protected $inventory;
 
 	public function getName() : string{
-		return "Horse";
+		return "Skeleton Horse";
 	}
 
 	/**
@@ -82,15 +68,6 @@ class Horse extends AbstractHorse implements InventoryHolder{
 		$this->behaviorPool->setBehavior(1, new FloatBehavior($this));
 		$this->behaviorPool->setBehavior(2, new PanicBehavior($this, 1.25));
 		$this->behaviorPool->setBehavior(3, new MateBehavior($this, 1.0));
-		$this->behaviorPool->setBehavior(4, new TemptBehavior($this, [
-			Item::WHEAT,
-			Item::APPLE,
-			Item::WHEAT_BLOCK,
-			Item::GOLDEN_APPLE,
-			Item::ENCHANTED_GOLDEN_APPLE,
-			Item::GOLDEN_CARROT,
-			Item::SUGAR
-		], 1.2));
 		$this->behaviorPool->setBehavior(5, new FollowParentBehavior($this, 1.1));
 		$this->behaviorPool->setBehavior(6, new RandomStrollBehavior($this, 1.0));
 		$this->behaviorPool->setBehavior(7, new LookAtPlayerBehavior($this, 6.0));
@@ -98,18 +75,10 @@ class Horse extends AbstractHorse implements InventoryHolder{
 	}
 
 	protected function initEntity() : void{
-		$this->setMaxHealth($this->getModifiedMaxHealth());
+		$this->setMaxHealth(15);
 		$this->setMovementSpeed($this->getModifiedMovementSpeed());
 		$this->setJumpStrength($this->getModifiedJumpStrength());
 		$this->setFollowRange(35);
-
-		if($this->namedtag->hasTag("Variant", IntTag::class) and $this->namedtag->hasTag("MarkVariant", IntTag::class)){
-			$this->setVariant($this->namedtag->getInt("Variant"));
-			$this->setMarkVariant($this->namedtag->getInt("MarkVariant"));
-		}else{
-			$this->setVariant(mt_rand(0, 7));
-			$this->setMarkVariant(mt_rand(0, 5));
-		}
 
 		$this->inventory = new HorseInventory($this);
 
@@ -171,12 +140,6 @@ class Horse extends AbstractHorse implements InventoryHolder{
 		}
 	}
 
-	public function onDeath() : void{
-		parent::onDeath();
-
-		$this->inventory->dropContents($this->level, $this);
-	}
-
 	public function saveNBT() : void{
 		parent::saveNBT();
 
@@ -185,4 +148,11 @@ class Horse extends AbstractHorse implements InventoryHolder{
 			$this->namedtag->setTag($this->inventory->getArmor()->nbtSerialize(-1, "ArmorItem"));
 		}
 	}
+
+	public function getDrops() : array{
+		return [
+			ItemFactory::get(Item::BONE, 0, mt_rand(0, 2))
+		];
+	}
+	//TODO: add changing normal horse to skeleton by lightning
 }

@@ -75,7 +75,8 @@ class Blaze extends Monster implements RangedAttackerMob{
 
 	public function getDrops() : array{
 		return [
-			ItemFactory::get(Item::BLAZE_ROD, 0, rand(0, 1)), ItemFactory::get(Item::GLOWSTONE_DUST, 0, rand(0, 2))
+			ItemFactory::get(Item::BLAZE_ROD, 0, rand(0, 1)),
+			ItemFactory::get(Item::GLOWSTONE_DUST, 0, rand(0, 2))
 		];
 	}
 

@@ -25,9 +25,9 @@ declare(strict_types=1);
 namespace pocketmine\entity\behavior;
 
 use pocketmine\entity\Entity;
+use pocketmine\entity\pathfinding\navigate\PathNavigateGround;
 use pocketmine\entity\Tamable;
 use pocketmine\Player;
-
 
 class FollowOwnerBehavior extends Behavior{
 
@@ -66,11 +66,15 @@ class FollowOwnerBehavior extends Behavior{
 
 	public function onStart() : void{
 		$this->followDelay = 0;
-		$this->mob->getNavigator()->setAvoidsWater(false);
+
+		$navigator = $this->mob->getNavigator();
+		if($navigator instanceof PathNavigateGround){
+			$navigator->setAvoidsWater(true);
+		}
 	}
 
 	public function canContinue() : bool{
-		return $this->mob->getNavigator()->isBusy() and $this->mob->distanceSquared($this->owner) > ($this->maxDistance ** 2) and !$this->mob->isSitting();
+		return !$this->mob->getNavigator()->noPath() and $this->mob->distanceSquared($this->owner) > ($this->maxDistance ** 2) and !$this->mob->isSitting();
 	}
 
 	public function onTick() : void{
@@ -80,12 +84,12 @@ class FollowOwnerBehavior extends Behavior{
 			if(--$this->followDelay <= 0){
 				$this->followDelay = 10;
 
-				$this->mob->getNavigator()->tryMoveTo($this->owner, $this->speedMultiplier);
+				$this->mob->getNavigator()->tryMoveToEntity($this->owner, $this->speedMultiplier);
 
 				if(!$this->mob->isLeashed()){
 					if($this->mob->distanceSquared($this->owner) > 144){
 						$this->mob->teleport($this->owner);
-						$this->mob->getNavigator()->clearPath(true);
+						$this->mob->getNavigator()->clearPathEntity();
 					}
 				}
 			}
@@ -93,8 +97,12 @@ class FollowOwnerBehavior extends Behavior{
 	}
 
 	public function onEnd() : void{
-		$this->mob->getNavigator()->clearPath(true);
+		$this->mob->getNavigator()->clearPathEntity();
 		$this->owner = null;
-		$this->mob->getNavigator()->setAvoidsWater(true);
+
+		$navigator = $this->mob->getNavigator();
+		if($navigator instanceof PathNavigateGround){
+			$navigator->setAvoidsWater(true);
+		}
 	}
 }

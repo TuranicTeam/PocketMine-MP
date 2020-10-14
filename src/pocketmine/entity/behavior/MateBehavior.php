@@ -61,7 +61,7 @@ class MateBehavior extends Behavior{
 
 	public function onTick() : void{
 		$this->mob->getLookHelper()->setLookPositionWithEntity($this->targetMate, 10, $this->mob->getVerticalFaceSpeed());
-		$this->mob->getNavigator()->tryMoveTo($this->targetMate, $this->speedMultiplier);
+		$this->mob->getNavigator()->tryMoveToEntity($this->targetMate, $this->speedMultiplier);
 
 		$this->spawnBabyDelay++;
 

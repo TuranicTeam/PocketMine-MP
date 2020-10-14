@@ -31,7 +31,8 @@ use pocketmine\entity\helper\EntityBodyHelper;
 use pocketmine\entity\helper\EntityJumpHelper;
 use pocketmine\entity\helper\EntityLookHelper;
 use pocketmine\entity\helper\EntityMoveHelper;
-use pocketmine\entity\pathfinder\EntityNavigator;
+use pocketmine\entity\pathfinding\navigate\PathNavigate;
+use pocketmine\entity\pathfinding\navigate\PathNavigateGround;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
@@ -49,7 +50,7 @@ abstract class Mob extends Living{
 	protected $behaviorPool;
 	/** @var BehaviorPool */
 	protected $targetBehaviorPool;
-	/** @var EntityNavigator */
+	/** @var PathNavigate */
 	protected $navigator;
 	/** @var Entity[] */
 	protected $seenEntities = [];
@@ -145,7 +146,7 @@ abstract class Mob extends Living{
 
 		$this->targetBehaviorPool = new BehaviorPool();
 		$this->behaviorPool = new BehaviorPool();
-		$this->navigator = new EntityNavigator($this);
+		$this->navigator = $this->createNavigator();
 		$this->moveHelper = new EntityMoveHelper($this);
 		$this->jumpHelper = new EntityJumpHelper($this);
 		$this->lookHelper = new EntityLookHelper($this);
@@ -184,7 +185,7 @@ abstract class Mob extends Living{
 		Timings::$mobBehaviorUpdateTimer->stopTiming();
 
 		Timings::$mobNavigationUpdateTimer->startTiming();
-		$this->navigator->onNavigateUpdate();
+		$this->navigator->tick();
 		Timings::$mobNavigationUpdateTimer->stopTiming();
 
 		$this->moveHelper->onUpdate();
@@ -211,8 +212,12 @@ abstract class Mob extends Living{
 		$this->moveWithHeading($this->moveStrafing, $this->moveForward);
 
 		$this->bodyHelper->onUpdate();
-		
+
 		$this->tryToDespawn();
+	}
+
+	protected function createNavigator() : PathNavigate{
+		return new PathNavigateGround($this);
 	}
 
 	/**
@@ -226,8 +231,7 @@ abstract class Mob extends Living{
 		}elseif(in_array($target->getId(), $this->seenEntities)){
 			return true;
 		}else{
-			// TODO: Fix seen from corners
-			$canSee = $this->getNavigator()->isClearBetweenPoints($this, $target);
+			$canSee = $this->getNavigator()->isDirectPathBetweenPoints($this, $target, new Vector3($i = ceil($this->width + 0.25), $this->height + 1, $i));
 
 			if($canSee){
 				$this->seenEntities[] = $target->getId();
@@ -270,10 +274,7 @@ abstract class Mob extends Living{
 		$this->motion->y += 0.04;
 	}
 
-	/**
-	 * @return EntityNavigator
-	 */
-	public function getNavigator() : EntityNavigator{
+	public function getNavigator() : PathNavigate{
 		return $this->navigator;
 	}
 
@@ -303,7 +304,7 @@ abstract class Mob extends Living{
 			}
 
 			if($f > 4){
-				$this->navigator->tryMoveTo($entity, 1.0);
+				$this->navigator->tryMoveToEntity($entity, 1.0);
 			}
 
 			if($f > 6){
@@ -321,7 +322,7 @@ abstract class Mob extends Living{
 			}
 		}
 	}
-	
+
 	protected function tryToDespawn() : void{
 		if($this->canDespawn() and $this->level->getNearestEntity($this, 128, Player::class, true) === null){
 			$this->flagForDespawn();

@@ -67,7 +67,7 @@ class AvoidMobTypeBehavior extends Behavior{
 			$vec = RandomPositionGenerator::findRandomTargetBlockAwayFrom($this->mob, 16, 7, $nearest);
 
 			if($vec !== null and $nearest->distanceSquared($vec) >= $nearest->distanceSquared($this->mob)){
-				$this->path = $this->mob->getNavigator()->findPath($vec);
+				$this->path = $this->mob->getNavigator()->getPathToPos($vec);
 
 				return $this->path !== null;
 			}
@@ -77,19 +77,18 @@ class AvoidMobTypeBehavior extends Behavior{
 	}
 
 	public function canContinue() : bool{
-		return $this->mob->getNavigator()->isBusy();
+		return !$this->mob->getNavigator()->noPath();
 	}
 
 	public function onStart() : void{
-		$this->mob->getNavigator()->setPath($this->path);
-		$this->mob->getNavigator()->setSpeedMultiplier($this->farSpeed);
+		$this->mob->getNavigator()->setPath($this->path, $this->farSpeed);
 	}
 
 	public function onTick() : void{
 		if($this->mob->distanceSquared($this->nearestEntity) < 49){
-			$this->mob->getNavigator()->setSpeedMultiplier($this->nearSpeed);
+			$this->mob->getNavigator()->setSpeed($this->nearSpeed);
 		}else{
-			$this->mob->getNavigator()->setSpeedMultiplier($this->farSpeed);
+			$this->mob->getNavigator()->setSpeed($this->farSpeed);
 		}
 	}
 

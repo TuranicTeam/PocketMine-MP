@@ -76,7 +76,8 @@ class Skeleton extends Monster implements RangedAttackerMob, Smite{
 
 	public function getDrops() : array{
 		return [
-			ItemFactory::get(Item::BONE, 0, rand(0, 2)), ItemFactory::get(Item::ARROW, 0, rand(0, 2))
+			ItemFactory::get(Item::BONE, 0, rand(0, 2)),
+			ItemFactory::get(Item::ARROW, 0, rand(0, 2))
 		];
 	}
 

@@ -25,13 +25,18 @@ declare(strict_types=1);
 namespace pocketmine\entity\behavior;
 
 use pocketmine\entity\Mob;
-use pocketmine\math\Vector3;
+use pocketmine\entity\pathfinding\navigate\PathNavigateGround;
 
 class FloatBehavior extends Behavior{
 
 	public function __construct(Mob $mob){
 		parent::__construct($mob);
 		$this->mutexBits = 4;
+
+		$navigator = $this->mob->getNavigator();
+		if($navigator instanceof PathNavigateGround){
+			$navigator->setCanSwim(true);
+		}
 	}
 
 	public function canStart() : bool{

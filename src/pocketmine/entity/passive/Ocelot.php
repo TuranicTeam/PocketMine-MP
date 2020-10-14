@@ -27,11 +27,14 @@ use pocketmine\entity\behavior\FloatBehavior;
 use pocketmine\entity\behavior\FollowOwnerBehavior;
 use pocketmine\entity\behavior\LookAtPlayerBehavior;
 use pocketmine\entity\behavior\MateBehavior;
+use pocketmine\entity\behavior\MeleeAttackBehavior;
+use pocketmine\entity\behavior\NearestAttackableTargetBehavior;
 use pocketmine\entity\behavior\PanicBehavior;
 use pocketmine\entity\behavior\RandomLookAroundBehavior;
 use pocketmine\entity\behavior\RandomStrollBehavior;
 use pocketmine\entity\behavior\StayWhileSittingBehavior;
 use pocketmine\entity\behavior\TemptBehavior;
+use pocketmine\entity\passive\Chicken;
 use pocketmine\entity\Tamable;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -42,8 +45,8 @@ use pocketmine\network\mcpe\protocol\ActorEventPacket;
 use pocketmine\Player;
 use function mt_rand;
 
-class Cat extends Tamable{
-	public const NETWORK_ID = self::CAT;
+class Ocelot extends Tamable{
+	public const NETWORK_ID = self::OCELOT;
 
 	public $width = 0.6;
 	public $height = 0.7;
@@ -61,10 +64,13 @@ class Cat extends Tamable{
 		], 1.0));
 		$this->behaviorPool->setBehavior(5, new FollowOwnerBehavior($this, 1, 10, 2));
 		$this->behaviorPool->setBehavior(6, new LookAtPlayerBehavior($this, 14.0));
-		$this->behaviorPool->setBehavior(7, new RandomStrollBehavior($this, 1));
-		$this->behaviorPool->setBehavior(8, new RandomLookAroundBehavior($this));
+		$this->behaviorPool->setBehavior(7, new RandomLookAroundBehavior($this));
+		$this->behaviorPool->setBehavior(8, new RandomStrollBehavior($this, 0.8));
+		$this->behaviorPool->setBehavior(9, new MeleeAttackBehavior($this, 1.0));
 
-		// TODO: attack turtle and rabbit
+		$this->targetBehaviorPool->setBehavior(1, new NearestAttackableTargetBehavior($this, Chicken::class, false));
+		//$this->targetBehaviorPool->setBehavior(9, new NearestAttackableTargetBehavior($this, SeaTurtle::class, false));
+		//Also  i have no idea why attack dont works
 	}
 
 	protected function initEntity() : void{
@@ -72,38 +78,34 @@ class Cat extends Tamable{
 		$this->setMovementSpeed(0.3);
 		$this->setFollowRange(16);
 		$this->setAttackDamage(3);
-		$this->propertyManager->setInt(self::DATA_VARIANT, intval($this->namedtag->getInt("CatType", mt_rand(1, 10))));
+		$this->propertyManager->setInt(self::DATA_VARIANT, intval($this->namedtag->getInt("CatType", 0)));
 		$this->propertyManager->setInt(self::DATA_COLOR, intval($this->namedtag->getInt("CollarColor", mt_rand(0, 15))));
 
 		parent::initEntity();
 	}
 
 	public function getName() : string{
-		return "Cat";
+		return "Ocelot";
 	}
 
 	public function onInteract(Player $player, Item $item, Vector3 $clickPos) : bool{
 		if(!$this->isImmobile()){
-			if($item->getId() == Item::RAW_SALMON || $item->getId() == Item::RAW_FISH || $item->getId() == Item::CLOWNFISH){
+			if($item->getId() == Item::RAW_SALMON || $item->getId() == Item::RAW_FISH){
 				if($player->isSurvival()){
 					$item->pop();
 				}
 				if($this->isTamed()){
+					$this->setTargetEntity(null);
 					$this->setInLove(true);
 					$this->setHealth(min($this->getMaxHealth(), $this->getHealth() + 2));
 				}elseif(mt_rand(0, 2) == 0){
 					$this->setOwningEntity($player);
 					$this->setTamed();
-					$this->setSittingFromBehavior(true);
 					$this->broadcastEntityEvent(ActorEventPacket::TAME_SUCCESS);
 				}else{
 					$this->broadcastEntityEvent(ActorEventPacket::TAME_FAIL);
 				}
 				return true;
-			}else{
-				if($this->isTamed()){
-					$this->setSittingFromBehavior(!$this->isSitting());
-				}
 			}
 		}
 		return parent::onInteract($player, $item, $clickPos);
@@ -126,9 +128,6 @@ class Cat extends Tamable{
 		];
 	}
 
-	public function setSittingFromBehavior(bool $value) : void{
-		$this->behaviorSitting->setSitting($value);
-	}
 
 	public function attack(EntityDamageEvent $source) : void{
 		if($source->getCause() !== EntityDamageEvent::CAUSE_FALL){

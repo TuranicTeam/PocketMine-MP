@@ -74,7 +74,7 @@ class EntityLookHelper{
 			$this->entity->headYaw = self::updateRotation($this->entity->headYaw, $this->entity->yawOffset, 10);
 		}
 		$f2 = self::wrapAngleTo180($this->entity->headYaw - $this->entity->yawOffset);
-		if($this->entity->getNavigator()->isBusy()){
+		if(!$this->entity->getNavigator()->noPath()){
 			if($f2 < -75){
 				$this->entity->headYaw = $this->entity->yawOffset - 75;
 			}

@@ -83,9 +83,9 @@ class TemptBehavior extends Behavior{
 		$this->mob->getLookHelper()->setLookPositionWithEntity($this->temptingPlayer, 30, $this->mob->getVerticalFaceSpeed());
 
 		if($this->temptingPlayer->distanceSquared($this->mob) < 6.25){
-			$this->mob->getNavigator()->clearPath();
+			$this->mob->getNavigator()->clearPathEntity();
 		}else{
-			$this->mob->getNavigator()->tryMoveTo($this->temptingPlayer, $this->speedMultiplier);
+			$this->mob->getNavigator()->tryMoveToEntity($this->temptingPlayer, $this->speedMultiplier);
 		}
 	}
 
@@ -93,6 +93,6 @@ class TemptBehavior extends Behavior{
 		$this->delayTemptCounter = 100;
 		$this->temptingPlayer = null;
 		$this->mob->pitch = 0;
-		$this->mob->getNavigator()->clearPath();
+		$this->mob->getNavigator()->clearPathEntity();
 	}
 }

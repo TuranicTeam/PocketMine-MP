@@ -52,7 +52,7 @@ class Pig extends Animal{
 		$this->behaviorPool->setBehavior(0, new FloatBehavior($this));
 		$this->behaviorPool->setBehavior(1, new PanicBehavior($this, 1.25));
 		$this->behaviorPool->setBehavior(2, new MateBehavior($this, 1.0));
-		$this->behaviorPool->setBehavior(3, new TemptBehavior($this, [Item::WHEAT], 1.2));
+		$this->behaviorPool->setBehavior(3, new TemptBehavior($this, [Item::CARROT, Item::CARROT_ON_A_STICK, Item::POTATO, Item::BEETROOT], 1.2));
 		// TODO: Add ControlledByPlayerBehavior
 		$this->behaviorPool->setBehavior(4, new FollowParentBehavior($this, 1.1));
 		$this->behaviorPool->setBehavior(5, new RandomStrollBehavior($this, 1.0));

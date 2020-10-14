@@ -79,7 +79,7 @@ class FollowParentBehavior extends Behavior{
 	public function onTick() : void{
 		if($this->delay-- <= 0){
 			$this->delay = 10;
-			$this->mob->getNavigator()->tryMoveTo($this->parentAnimal, $this->speedMultiplier);
+			$this->mob->getNavigator()->tryMoveToEntity($this->parentAnimal, $this->speedMultiplier);
 		}
 	}
 

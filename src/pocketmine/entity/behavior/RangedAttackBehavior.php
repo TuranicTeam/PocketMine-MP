@@ -70,7 +70,7 @@ class RangedAttackBehavior extends Behavior{
 	}
 
 	public function canContinue() : bool{
-		return $this->canStart() or $this->mob->getNavigator()->isBusy();
+		return $this->canStart() or !$this->mob->getNavigator()->noPath();
 	}
 
 	public function onEnd() : void{
@@ -89,9 +89,9 @@ class RangedAttackBehavior extends Behavior{
 		}
 
 		if($dist <= $this->maxAttackDistance and $this->targetSeenTicks >= 20){
-			$this->mob->getNavigator()->clearPath();
+			$this->mob->getNavigator()->clearPathEntity();
 		}else{
-			$this->mob->getNavigator()->tryMoveTo($this->attackTarget, $this->speedMultiplier);
+			$this->mob->getNavigator()->tryMoveToEntity($this->attackTarget, $this->speedMultiplier);
 		}
 
 		$this->mob->getLookHelper()->setLookPositionWithEntity($this->attackTarget, 30, 30);

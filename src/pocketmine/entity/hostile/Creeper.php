@@ -37,6 +37,7 @@ use pocketmine\entity\behavior\RandomLookAroundBehavior;
 use pocketmine\entity\behavior\RandomStrollBehavior;
 use pocketmine\entity\Monster;
 use pocketmine\entity\passive\Cat;
+use pocketmine\entity\passive\Ocelot;
 use pocketmine\item\FlintSteel;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
@@ -96,6 +97,7 @@ class Creeper extends Monster implements Ageable{
 		$this->behaviorPool->setBehavior(1, new CreeperSwellBehavior($this));
 		// TODO: Avoid from ocelot
 		$this->behaviorPool->setBehavior(2, new AvoidMobTypeBehavior($this, Cat::class, null, 6, 1, 1.2));
+		$this->behaviorPool->setBehavior(2, new AvoidMobTypeBehavior($this, Ocelot::class, null, 6, 1, 1.2));
 		$this->behaviorPool->setBehavior(3, new MeleeAttackBehavior($this, 1.0));
 		$this->behaviorPool->setBehavior(4, new RandomStrollBehavior($this, 0.8));
 		$this->behaviorPool->setBehavior(5, new LookAtPlayerBehavior($this, 8.0));

@@ -113,7 +113,7 @@ abstract class TargetBehavior extends Behavior{
 
 	private function canEasilyReach(Living $entity) : bool{
 		$this->targetSearchDelay = 10 + $this->mob->random->nextBoundedInt(5);
-		$path = $this->mob->getNavigator()->findPath($entity);
+		$path = $this->mob->getNavigator()->getPathToEntity($entity);
 
 		if($path == null){
 			return false;

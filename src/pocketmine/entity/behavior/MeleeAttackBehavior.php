@@ -57,14 +57,13 @@ class MeleeAttackBehavior extends Behavior{
 
 		$this->lastPlayerPos = $target->asVector3();
 
-		$this->path = $this->mob->getNavigator()->findPath($target);
-		return $this->path->havePath();
+		$this->path = $this->mob->getNavigator()->getPathToEntity($target);
+		return $this->path !== null;
 	}
 
 	public function onStart() : void{
 		$this->delay = 0;
-		$this->mob->getNavigator()->setPath($this->path);
-		$this->mob->getNavigator()->setSpeedMultiplier($this->speedMultiplier);
+		$this->mob->getNavigator()->setPath($this->path, $this->speedMultiplier);
 	}
 
 	public function canContinue() : bool{
@@ -95,7 +94,7 @@ class MeleeAttackBehavior extends Behavior{
 				$this->delay += 5;
 			}
 
-			if(!$this->mob->getNavigator()->tryMoveTo($target, $this->speedMultiplier)){
+			if(!$this->mob->getNavigator()->tryMoveToEntity($target, $this->speedMultiplier)){
 				$this->delay += 15;
 			}
 		}
@@ -118,7 +117,7 @@ class MeleeAttackBehavior extends Behavior{
 		$this->mob->pitch = 0;
 		$this->attackCooldown = $this->delay = 0;
 		$this->path = null;
-		$this->mob->getNavigator()->clearPath();
+		$this->mob->getNavigator()->clearPathEntity();
 	}
 
 }

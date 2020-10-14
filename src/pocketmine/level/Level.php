@@ -29,7 +29,9 @@ namespace pocketmine\level;
 use pocketmine\block\Air;
 use pocketmine\block\Block;
 use pocketmine\block\BlockFactory;
+use pocketmine\block\Lava;
 use pocketmine\block\Liquid;
+use pocketmine\block\Water;
 use pocketmine\entity\CreatureType;
 use pocketmine\entity\Entity;
 use pocketmine\entity\object\ExperienceOrb;
@@ -1353,11 +1355,11 @@ class Level implements ChunkManager, Metadatable{
 
 	/**
 	 * @param AxisAlignedBB $bb
-	 * @param Liquid        $material
+	 * @param bool          $isLava
 	 *
 	 * @return bool
 	 */
-	public function isLiquidInBoundingBox(AxisAlignedBB $bb, Liquid $material) : bool{
+	public function isLiquidInBoundingBox(AxisAlignedBB $bb, bool $isLava = false) : bool{
 		$minX = (int) floor($bb->minX);
 		$minY = (int) floor($bb->minY);
 		$minZ = (int) floor($bb->minZ);
@@ -1370,7 +1372,7 @@ class Level implements ChunkManager, Metadatable{
 				for($z = $minZ; $z < $maxZ; ++$z){
 					$block = $this->getBlockAt($x, $y, $z);
 
-					if($block instanceof $material){
+					if(($isLava and $block instanceof Lava) or (!$isLava and $block instanceof Water)){
 						$j2 = $block->getDamage();
 						$d0 = $y + 1;
 

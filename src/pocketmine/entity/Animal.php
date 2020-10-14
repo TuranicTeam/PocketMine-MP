@@ -112,7 +112,7 @@ abstract class Animal extends Mob implements Ageable{
 	}
 
 	public function getVariant() : int{
-		return $this->propertyManager->getInt(self::DATA_VARIANT);
+		return $this->propertyManager->getInt(self::DATA_VARIANT) ?? 0;
 	}
 
 	public function setVariant(int $variant) : void{
@@ -120,7 +120,7 @@ abstract class Animal extends Mob implements Ageable{
 	}
 
 	public function getMarkVariant() : int{
-		return $this->propertyManager->getInt(self::DATA_MARK_VARIANT);
+		return $this->propertyManager->getInt(self::DATA_MARK_VARIANT) ?? 0;
 	}
 
 	public function setMarkVariant(int $markVariant) : void{

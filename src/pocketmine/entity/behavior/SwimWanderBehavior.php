@@ -24,51 +24,49 @@ declare(strict_types=1);
 
 namespace pocketmine\entity\behavior;
 
+use pocketmine\block\Water;
 use pocketmine\entity\Mob;
 use pocketmine\entity\utils\RandomPositionGenerator;
-use pocketmine\math\Vector3;
 
-class RandomStrollBehavior extends Behavior{
+class SwimWanderBehavior extends Behavior{
 
 	/** @var float */
 	protected $speedMultiplier = 1.0;
-	/** @var int */
-	protected $chance = 120;
-	/** @var Vector3|null */
-	protected $targetPos;
+	protected $interval;
+	protected $lookAhead;
 
-	public function __construct(Mob $mob, float $speedMultiplier = 1.0, int $chance = 120){
+	public function __construct(Mob $mob, float $speedMultiplier = 1.0, int $interval = 10, float $lookAhead = 2.0){
 		parent::__construct($mob);
 
 		$this->speedMultiplier = $speedMultiplier;
-		$this->chance = $chance;
+		$this->interval = $interval;
+		$this->lookAhead = $lookAhead;
+
 		$this->mutexBits = 1;
 	}
 
 	public function canStart() : bool{
-		if($this->random->nextBoundedInt($this->chance) === 0){
-			$pos = RandomPositionGenerator::findRandomTargetBlock($this->mob, 10, 7);
-
-			if($pos === null) return false;
-
-			$this->targetPos = $pos;
-
-			return true;
-		}
-
-		return false;
+		return $this->random->nextBoundedInt($this->interval) === 0;
 	}
 
 	public function canContinue() : bool{
-		return !$this->mob->getNavigator()->noPath();
+		return $this->lookAhead > 0;
 	}
 
 	public function onStart() : void{
-		$this->mob->getNavigator()->tryMoveToPos($this->targetPos, $this->speedMultiplier);
+		$this->mob->pitch = 0;
+		$this->mob->yaw = $this->random->nextBoundedInt(360);
+		$this->mob->headYaw = $this->mob->yaw;
+		$this->mob->yawOffset = $this->mob->yaw;
+		$this->mob->setMoveForward($speed = $this->speedMultiplier * $this->mob->getMovementSpeed());
+		$this->mob->setAIMoveSpeed($speed);
+	}
+
+	public function onTick() : void{
+		$this->lookAhead -= 0.1;
 	}
 
 	public function onEnd() : void{
-		$this->targetPos = null;
-		$this->mob->getNavigator()->clearPathEntity();
+		$this->mob->setMoveForward(0.0);
 	}
 }
