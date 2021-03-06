@@ -95,19 +95,7 @@ class Painting extends Entity{
 		}
 		parent::kill();
 
-		$drops = true;
-
-		if($this->lastDamageCause instanceof EntityDamageByEntityEvent){
-			$killer = $this->lastDamageCause->getDamager();
-			if($killer instanceof Player and $killer->isCreative()){
-				$drops = false;
-			}
-		}
-
-		if($drops){
-			//non-living entities don't have a way to create drops generically yet
-			$this->level->dropItem($this, ItemFactory::get(Item::PAINTING));
-		}
+		$this->level->dropItem($this, ItemFactory::get(Item::PAINTING));
 		$this->level->addParticle(new DestroyBlockParticle($this->add(0.5, 0.5, 0.5), BlockFactory::get(Block::PLANKS)));
 	}
 
@@ -137,6 +125,7 @@ class Painting extends Entity{
 		$face = $directions[$this->direction];
 		if(!self::canFit($this->level, $this->blockIn->getSide($face), $face, false, $this->getMotive())){
 			$this->kill();
+			$this->close();
 		}
 	}
 

@@ -37,6 +37,7 @@ use pocketmine\entity\Human;
 use pocketmine\entity\InvalidSkinException;
 use pocketmine\entity\Living;
 use pocketmine\entity\object\ItemEntity;
+use pocketmine\entity\object\Painting;
 use pocketmine\entity\passive\AbstractHorse;
 use pocketmine\entity\projectile\Arrow;
 use pocketmine\entity\projectile\FishingHook;
@@ -94,6 +95,7 @@ use pocketmine\item\Durable;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\enchantment\MeleeWeaponEnchantment;
 use pocketmine\item\Item;
+use pocketmine\item\ItemFactory;
 use pocketmine\item\MaybeConsumable;
 use pocketmine\item\WritableBook;
 use pocketmine\item\WrittenBook;
@@ -104,6 +106,7 @@ use pocketmine\level\format\Chunk;
 use pocketmine\level\GameRules;
 use pocketmine\level\Level;
 use pocketmine\level\Location;
+use pocketmine\level\particle\DestroyBlockParticle;
 use pocketmine\level\Position;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Vector3;
@@ -2884,6 +2887,15 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 							}
 
 							$this->exhaust(0.3, PlayerExhaustEvent::CAUSE_ATTACK);
+						}
+
+						if($target instanceof Painting){
+							$this->level->addParticle(new DestroyBlockParticle($target->add(0.5, 0.5, 0.5), BlockFactory::get(Block::PLANKS)));
+
+							if(!$this->isCreative()){
+								$this->level->dropItem($target, ItemFactory::get(Item::PAINTING));
+							}
+							$target->close();
 						}
 
 						return true;
