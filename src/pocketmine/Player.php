@@ -113,7 +113,6 @@ use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\ListTag;
-use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\mcpe\convert\ItemTypeDictionary;
 use pocketmine\network\mcpe\PlayerNetworkSessionAdapter;
 use pocketmine\network\mcpe\protocol\ActorEventPacket;
@@ -433,8 +432,8 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 
 	/** @var float */
 	protected $lastRightClickTime = 0.0;
-	/** @var \stdClass|null */
-	protected $lastRightClickData = null;
+	/** @var Vector3|null */
+	protected $lastRightClickPos = null;
 	/** @var FishingHook|null */
 	protected $fishingHook = null;
 	/** @var int */
@@ -2086,6 +2085,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 
 		$skinData = new SkinData(
 			$packet->clientData["SkinId"],
+			$packet->clientData["PlayFabId"],
 			base64_decode($packet->clientData["SkinResourcePatch"] ?? "", true),
 			new SkinImage(
 				$packet->clientData["SkinImageHeight"],
@@ -2202,25 +2202,6 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	 * @return void
 	 */
 	protected function processLogin(){
-		$this->namedtag = $this->server->getOfflinePlayerData($this->username);
-		if((bool) $this->server->getProperty("player.verify-xuid", true)){
-			$recordedXUID = $this->namedtag->getTag("LastKnownXUID");
-			if(!($recordedXUID instanceof StringTag)){
-				$this->server->getLogger()->debug("No previous XUID recorded for " . $this->getName() . ", no choice but to trust this player");
-			}elseif($this->xuid !== $recordedXUID->getValue()){
-				if($this->kick("XUID does not match (possible impersonation attempt)", false)){
-					//TODO: Longer term, we should be identifying playerdata using something more reliable, like XUID or UUID.
-					//However, that would be a very disruptive change, so this will serve as a stopgap for now.
-					//Side note: this will also prevent offline players hijacking XBL playerdata on online servers, since their
-					//XUID will always be empty.
-					return;
-				}
-				$this->server->getLogger()->debug("XUID mismatch for " . $this->getName() . ", but plugin cancelled event allowing them to join anyway");
-			}else{
-				$this->server->getLogger()->debug("XUID match for " . $this->getName());
-			}
-		}
-
 		foreach($this->server->getLoggedInPlayers() as $p){
 			if($p !== $this and ($p->iusername === $this->iusername or $this->getUniqueId()->equals($p->getUniqueId()))){
 				if(!$p->kick("logged in from another location")){
@@ -2230,6 +2211,8 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 				}
 			}
 		}
+
+		$this->namedtag = $this->server->getOfflinePlayerData($this->username);
 
 		$this->playedBefore = ($this->getLastPlayed() - $this->getFirstPlayed()) > 1; // microtime(true) - microtime(true) may have less than one millisecond difference
 		$this->namedtag->setString("NameTag", $this->username);
@@ -2390,6 +2373,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		$pk->worldName = $this->server->getMotd();
 		$pk->experiments = new Experiments([], false);
 		$pk->itemTable = ItemTypeDictionary::getInstance()->getEntries();
+		$pk->playerMovementSettings = new PlayerMovementSettings(PlayerMovementType::LEGACY, 0, false);
 		$this->dataPacket($pk);
 
 		$this->sendDataPacket(new AvailableActorIdentifiersPacket());
@@ -2644,16 +2628,12 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 				switch($type){
 					case InventoryTransactionPacket::USE_ITEM_ACTION_CLICK_BLOCK:
 						//TODO: start hack for client spam bug
-						$spamBug = ($this->lastRightClickData !== null and
+						$spamBug = ($this->lastRightClickPos !== null and
 							microtime(true) - $this->lastRightClickTime < 0.1 and //100ms
-							$this->lastRightClickData->playerPos->distanceSquared($packet->trData->playerPos) < 0.00001 and
-							$this->lastRightClickData->x === $packet->trData->x and
-							$this->lastRightClickData->y === $packet->trData->y and
-							$this->lastRightClickData->z === $packet->trData->z and
-							$this->lastRightClickData->clickPos->distanceSquared($packet->trData->clickPos) < 0.00001 //signature spam bug has 0 distance, but allow some error
+							$this->lastRightClickPos->distanceSquared($packet->trData->clickPos) < 0.00001 //signature spam bug has 0 distance, but allow some error
 						);
 						//get rid of continued spam if the player clicks and holds right-click
-						$this->lastRightClickData = $packet->trData;
+						$this->lastRightClickPos = clone $packet->trData->clickPos;
 						$this->lastRightClickTime = microtime(true);
 						if($spamBug){
 							return true;
@@ -3141,7 +3121,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 			case PlayerActionPacket::ACTION_STOP_GLIDE:
 				$this->toggleGlide(false);
 				break;
-			case PlayerActionPacket::ACTION_CONTINUE_BREAK:
+			case PlayerActionPacket::ACTION_CRACK_BREAK:
 				$block = $this->level->getBlock($pos);
 				$this->level->broadcastLevelEvent($pos, LevelEventPacket::EVENT_PARTICLE_PUNCH_BLOCK, $block->getRuntimeId() | ($packet->face << 24));
 				//TODO: destroy-progress level event
@@ -4022,8 +4002,6 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		}
 
 		parent::saveNBT();
-
-		$this->namedtag->setString("LastKnownXUID", $this->xuid);
 
 		if($this->isValid()){
 			$this->namedtag->setString("Level", $this->level->getFolderName());
