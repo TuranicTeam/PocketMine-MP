@@ -55,6 +55,7 @@ class AdventureSettingsPacket extends DataPacket{
 	public const MUTED = 0x400;
 
 	public const BUILD_AND_MINE = 0x01 | self::BITFLAG_SECOND_SET;
+	public const MINE = 0x01 | self::BITFLAG_SECOND_SET;
 	public const DOORS_AND_SWITCHES = 0x02 | self::BITFLAG_SECOND_SET;
 	public const OPEN_CONTAINERS = 0x04 | self::BITFLAG_SECOND_SET;
 	public const ATTACK_PLAYERS = 0x08 | self::BITFLAG_SECOND_SET;
