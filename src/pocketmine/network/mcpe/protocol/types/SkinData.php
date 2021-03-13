@@ -98,6 +98,10 @@ class SkinData{
 		return $this->skinId;
 	}
 
+	public function getplayFabId() : string{
+		return $this->playFabId;
+	}
+
 	public function getResourcePatch() : string{
 		return $this->resourcePatch;
 	}
