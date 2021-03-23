@@ -82,7 +82,7 @@ class ItemFactory{
 		self::registerItem(new Axe(Item::DIAMOND_AXE, 0, "Diamond Axe", TieredTool::TIER_DIAMOND));
 		self::registerItem(new Sword(Item::NETHERITE_SWORD, 0, "Netherite Sword", TieredTool::TIER_NETHERITE));
 		self::registerItem(new Shovel(Item::NETHERITE_SHOVEL, 0, "Netherite Shovel", TieredTool::TIER_NETHERITE));
-		self::registerItem(new Pickaxe(Item::NETHERITE_PICAXE, 0, "Netherite Picaxe", TieredTool::TIER_NETHERITE));
+		self::registerItem(new Pickaxe(Item::NETHERITE_PICKAXE, 0, "Netherite Picaxe", TieredTool::TIER_NETHERITE));
 		self::registerItem(new Axe(Item::NETHERITE_AXE, 0, "Netherite Axe", TieredTool::TIER_NETHERITE));
 		self::registerItem(new Stick());
 		self::registerItem(new Bowl());
