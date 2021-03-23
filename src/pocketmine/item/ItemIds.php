@@ -265,7 +265,7 @@ interface ItemIds extends BlockIds{
 	public const NETHERITE_INGOT = 742;
 	public const NETHERITE_SWORD = 743;
 	public const NETHERITE_SHOVEL = 744;
-	public const NETHERITE_PICAXE = 745;
+	public const NETHERITE_PICKAXE = 745;
 	public const NETHERITE_AXE = 746;
 	public const NETHERITE_HOE = 747;
 	public const NETHERITE_HELMET = 748;
