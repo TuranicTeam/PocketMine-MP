@@ -712,7 +712,7 @@ class NetworkBinaryStream extends BinaryStream{
 		$this->putUnsignedVarInt(count($rules));
 		foreach($rules as $name => $rule){
 			$this->putString($name);
-			$this->putBool($rule[2]);
+			$this->putBool($rule[2] ?? false);
 			$this->putUnsignedVarInt($rule[0]);
 			switch($rule[0]){
 				case GameRuleType::BOOL:
